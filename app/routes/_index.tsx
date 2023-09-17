@@ -13,7 +13,7 @@ export const loader = async () => {
 
 export default function IndexRoute() {
     const sessiondata = useLoaderData<typeof loader>();
-    return <div><h2>Viewer Mode</h2>
+    return <div>
         <table>
         <thead>
             <tr key="table-head">
