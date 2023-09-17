@@ -7,6 +7,7 @@
 From your terminal:
 
 ```sh
+npx prisma db push
 npm run dev
 ```
 
