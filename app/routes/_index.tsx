@@ -26,7 +26,7 @@ export default function IndexRoute() {
         <tbody>
             {slots.map((slot) => (
                 <tr key={"row"+slot.id}>
-                    <td key={slot.id}>{slot.time} (#{slot.id})</td>
+                    <td key={slot.id}>{slot.time}</td>
                     {getEntriesForSlot(slot.id, sessiondata.sessions).map((name) => (
                         <td key={slot.id + name}>{name}</td>
                     ))}
