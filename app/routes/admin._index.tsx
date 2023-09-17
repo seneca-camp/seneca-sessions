@@ -52,7 +52,11 @@ export default function IndexRoute() {
                 </div>
                 <div>
                 <label>
-                    room: <input type="text" name="room" defaultValue={actionData?.fields?.room}/>
+                    room: <select id="room" name="room" defaultValue={actionData?.fields?.room}>
+                    {rooms.map((room) => (
+                        <option value={room}>{room}</option>
+                    ))}
+                    </select>
                 </label>
                 </div>
                 <div>
