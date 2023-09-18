@@ -1,6 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import logo from "~/gfx/logo.png"
-import style from "~/style.css"
+import stylesheet from "~/tailwind.css"
 
 import {
   Form,
@@ -12,12 +12,12 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-export function Stylesheet() {
-  return <link rel="stylesheet" href={style} />
-}
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+];
 
 export function Logo() {
-  return <img src={logo} width="50px" alt="Seneca Logo" />;
+  return <img src={logo} width="200px" alt="Seneca Logo" />;
 }
 
 export default function App() {
@@ -29,14 +29,14 @@ export default function App() {
           name="viewport"
           content="width=device-width, initial-scale=1"
         />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css" />
-        <Stylesheet/>
+        <Links />
         <title>Seneca Sessions</title>
       </head>
-      <body>
-        <h1><Logo/>-Sessions #seneca23</h1>
+      <body className="mt-8">
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
+          <Logo />
+          <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-black">Seneca-Sessions #seneca23</h1>
+        </div>
         <Outlet />
         <LiveReload />
       </body>

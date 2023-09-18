@@ -13,9 +13,9 @@ export const loader = async () => {
 
 export default function IndexRoute() {
     const sessiondata = useLoaderData<typeof loader>();
-    return <div>
-        <table>
-        <thead>
+    return <>
+        <table className="w-full text-base text-center text-black table-fixed">
+        <thead className="text-lg text-white uppercase bg-fancyorange">
             <tr key="table-head">
                 <th key="head-1"></th>
                 {rooms.map((room) => (
@@ -23,16 +23,16 @@ export default function IndexRoute() {
                 ))}
             </tr> 
         </thead>
-        <tbody>
+        <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole [&>*:nth-child(even)]:bg-white">
             {slots.map((slot) => (
-                <tr key={"row"+slot.id}>
-                    <td key={slot.id}>{slot.time}</td>
+                <tr className="min-h-100" key={"row"+slot.id}>
+                    <td className="text-lg font-bold" key={slot.id}>{slot.time}</td>
                     {getEntriesForSlot(slot.id, sessiondata.sessions).map((name) => (
-                        <td key={slot.id + name}>{name}</td>
+                        <td key={slot.id + name}><p>{name}</p></td>
                     ))}
                 </tr>
             ))}
         </tbody>
-    </table>
-    </div>
+        </table>
+    </>
 }
