@@ -9,8 +9,13 @@ import { slots } from "~/utils/slots";
 import { Entry, getCorrectSession, getEntriesForSlot } from "~/utils/sessionsearcher";
 
 
-async function saveEntry(entry: Entry) {
+async function saveEntry(entry: Entry): boolean {
+    const exists = await db.session.count({ where: { slot: entry.slot, room: entry.room } })
+    if (exists) {
+        return false
+    }
     await db.session.create({data: entry})
+    return true
 }
 
 export const action = async ({
@@ -22,9 +27,12 @@ export const action = async ({
     const room = form.get("room");
     const entry = { slot, name, room };
     
-    saveEntry(entry);
+    let message = null;
 
-    return redirect(`/admin`);
+    if (!await saveEntry(entry)) {
+        message = `Entry at Room ${room}, Slot #${slot} already exists`;
+    }
+    return {message: message, name: name, slot: slot, room: room};
 };
 
 export const loader = async () => {
@@ -39,22 +47,23 @@ export default function IndexRoute() {
     const sessiondata = useLoaderData<typeof loader>();
     return <div><h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-grey">Edit Mode</h1>
         <div>
+            {actionData ? <p className="text-deeppurple">{actionData.message}</p> : ""}
             <form className="max-w-md bg-white shadow-md rounded px-8 pt-12 pb-8 mb-4" method="post" action="/admin/">
                 <div>
                 <label className="block text-gray-700 text-md font-bold mb-2">
-                    Name: <input type="text" name="name" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.fields?.name}/>
+                    Name: <input type="text" name="name" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.message ? actionData.name : ""}/>
                 </label>
                 </div>
                 <div>
                 <label className="block text-gray-700 text-md font-bold mb-2">
-                    Slot: <input type="number" name="slot" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.fields?.slot}/>
+                    Slot: <input type="number" name="slot" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.message ? actionData.slot : ""}/>
                 </label>
                 </div>
                 <div>
                 <label className="block text-gray-700 text-md font-bold mb-2">
-                    Room: <select id="room" name="room" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.fields?.room}>
+                    Room: <select id="room" name="room" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.message ? actionData.room : ""}>
                     {rooms.map((room) => (
-                        <option value={room}>{room}</option>
+                        <option key={"r"+room} value={room}>{room}</option>
                     ))}
                     </select>
                 </label>
