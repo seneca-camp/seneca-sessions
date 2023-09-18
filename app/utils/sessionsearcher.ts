@@ -12,11 +12,11 @@ export function getCorrectSession(room: string, slot: number, entries: [Entry]):
     return (entry !== undefined ? entry.name : "");
 }
 
-export function getEntriesForSlot(slot: number, entries: [Entry]): string[] {
-    let entryNames: string[] = [];
+export function getEntriesForSlot(slot: number, entries: [Entry]): Entry[] {
+    let entryNames: Entry[] = [];
     rooms.forEach(room => {
         const name = getCorrectSession(room, slot, entries);
-        entryNames.push(name)
+        entryNames.push({name: name, room: room, slot: slot})
     })
     return entryNames;
 }

@@ -18,10 +18,7 @@ async function saveEntry(entry: Entry): boolean {
     return true
 }
 
-export const action = async ({
-    request,
-  }: ActionFunctionArgs) => {
-    const form = await request.formData();
+async function create(form: FormData) {
     const name = form.get("name");
     const slot = +form.get("slot");
     const room = form.get("room");
@@ -33,6 +30,30 @@ export const action = async ({
         message = `Entry at Room ${room}, Slot #${slot} already exists`;
     }
     return {message: message, name: name, slot: slot, room: room};
+}
+
+async function deleteEntry(form: FormData) {
+    const slot = +form.get("slot");
+    const room = form.get("room");
+
+    const entryToDelete = await db.session.findFirst({where: {room: room, slot: slot}, })
+
+    await db.session.delete({where: {id: entryToDelete.id}})
+    return {}
+}
+
+export const action = async ({
+    request,
+  }: ActionFunctionArgs) => {
+    const form = await request.formData();
+    const type = form.get("type");
+
+    if (type === "create"){
+        return await create(form)
+    }
+    else if (type === "delete") {
+        return await deleteEntry(form)
+    }
 };
 
 export const loader = async () => {
@@ -68,6 +89,7 @@ export default function IndexRoute() {
                     </select>
                 </label>
                 </div>
+                <input type="hidden" name="type" value="create" />
                 <div>
                 <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Add
@@ -86,11 +108,16 @@ export default function IndexRoute() {
             </tr> 
         </thead>
         <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole [&>*:nth-child(even)]:bg-white">
-            {slots.map((slot) => (
-                <tr className="min-h-100" key={"row"+slot.id}>
-                    <td className="text-lg font-bold" key={slot.id}>{slot.time} #{slot.id}</td>
-                    {getEntriesForSlot(slot.id, sessiondata.sessions).map((name) => (
-                        <td key={slot.id + name}><p>{name}</p></td>
+            {slots.map((slotFull) => (
+                <tr className="min-h-100" key={"row"+slotFull.id}>
+                    <td className="text-lg font-bold" key={slotFull.id}>{slotFull.time} #{slotFull.id}</td>
+                    {getEntriesForSlot(slotFull.id, sessiondata.sessions).map(({name, slot, room}) => (
+                        <td key={slotFull.id + name}><p>{name} {(name !== "") ? <form method="post" action="/admin/">
+                            <input type="hidden" name="type" value="delete" />
+                            <input type="hidden" name="slot" value={slotFull.id} />
+                            <input type="hidden" name="room" value={room} />
+                            <button type="submit">X</button>
+                        </form> : ""}</p></td>
                     ))}
                 </tr>
             ))}

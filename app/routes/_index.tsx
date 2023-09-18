@@ -24,11 +24,11 @@ export default function IndexRoute() {
             </tr> 
         </thead>
         <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole [&>*:nth-child(even)]:bg-white">
-            {slots.map((slot) => (
-                <tr className="min-h-100" key={"row"+slot.id}>
-                    <td className="text-lg font-bold" key={slot.id}>{slot.time}</td>
-                    {getEntriesForSlot(slot.id, sessiondata.sessions).map((name) => (
-                        <td key={slot.id + name}><p>{name}</p></td>
+            {slots.map((slotFull) => (
+                <tr className="min-h-100" key={"row"+slotFull.id}>
+                    <td className="text-lg font-bold" key={slotFull.id}>{slotFull.time}</td>
+                    {getEntriesForSlot(slotFull.id, sessiondata.sessions).map(({name, slot, room}) => (
+                        <td key={slotFull.id + name}><p>{name}</p></td>
                     ))}
                 </tr>
             ))}
