@@ -32,7 +32,7 @@ export default function App() {
         <Links />
         <title>Seneca Sessions</title>
       </head>
-      <body className="mt-8">
+      <body className="p-4">
         <div style={{display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
           <Logo />
           <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-black">Seneca-Sessions #seneca23</h1>

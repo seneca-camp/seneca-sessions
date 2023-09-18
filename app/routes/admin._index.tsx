@@ -47,12 +47,12 @@ export default function IndexRoute() {
                 </div>
                 <div>
                 <label className="block text-gray-700 text-md font-bold mb-2">
-                    slot: <input type="number" name="slot" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.fields?.slot}/>
+                    Slot: <input type="number" name="slot" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.fields?.slot}/>
                 </label>
                 </div>
                 <div>
                 <label className="block text-gray-700 text-md font-bold mb-2">
-                    room: <select id="room" name="room" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.fields?.room}>
+                    Room: <select id="room" name="room" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.fields?.room}>
                     {rooms.map((room) => (
                         <option value={room}>{room}</option>
                     ))}
