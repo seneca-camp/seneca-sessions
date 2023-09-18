@@ -77,7 +77,7 @@ export default function IndexRoute() {
                 </div>
                 <div>
                 <label className="block text-gray-700 text-md font-bold mb-2">
-                    Slot: <input type="number" name="slot" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" defaultValue={actionData?.message ? actionData.slot : ""}/>
+                    Slot: <input type="number" name="slot" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min={slots[0].id} max={slots.slice(-1)[0].id} defaultValue={actionData?.message ? actionData.slot : ""}/>
                 </label>
                 </div>
                 <div>
