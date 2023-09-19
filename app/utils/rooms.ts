@@ -1,5 +1,10 @@
 export const rooms: string[] = [
-    "Room 1",
-    "Room 2",
-    "Room 3"
+    "Searles Chinesischer Raum",
+    "Diogenes' Fass",
+    "Putnams Tank",
+    "Platons Höhle",
+    "Schrödingers Box",
+    "Stoa",
+    "Theseus' Schiff",
+    "Agora"
 ]
