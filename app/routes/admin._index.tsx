@@ -107,7 +107,7 @@ export default function IndexRoute() {
                 ))}
             </tr> 
         </thead>
-        <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole [&>*:nth-child(even)]:bg-white">
+        <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole [&>*:nth-child(odd)]:text-white [&>*:nth-child(even)]:bg-white">
             {slots.map((slotFull) => (
                 <tr className="min-h-100" key={"row"+slotFull.id}>
                     <td className="text-lg font-bold" key={slotFull.id}>{slotFull.time} #{slotFull.id}</td>
