@@ -13,10 +13,10 @@ export const loader = async () => {
 
 export default function IndexRoute() {
     const sessiondata = useLoaderData<typeof loader>();
-    return <>
-        <table className="w-full text-base text-center text-black table-fixed border">
+    return <div className="overflow-x">
+        <table className="w-full text-base text-center text-black table-auto border overflow-scroll">
         <thead className="text-lg text-white uppercase bg-fancyorange">
-            <tr key="table-head" className="divide-x">
+            <tr key="table-head" className="divide-x min-width-fit">
                 <th key="head-1" ></th>
                 {rooms.map((room) => (
                     <th key={room}>{room}</th>
@@ -25,7 +25,7 @@ export default function IndexRoute() {
         </thead>
         <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole [&>*:nth-child(odd)]:text-white [&>*:nth-child(even)]:bg-white">
             {slots.map((slotFull) => (
-                <tr className="min-h-100 divide-x" key={"row"+slotFull.id}>
+                <tr className="min-h-100 divide-x min-width-fit" key={"row"+slotFull.id}>
                     <td className="text-lg font-bold" key={slotFull.id}>{slotFull.time}</td>
                     {getEntriesForSlot(slotFull.id, sessiondata.sessions).map(({name, slot, room}) => (
                         <td key={slotFull.id + name}><p>{name}</p></td>
@@ -34,5 +34,5 @@ export default function IndexRoute() {
             ))}
         </tbody>
         </table>
-    </>
+    </div>
 }

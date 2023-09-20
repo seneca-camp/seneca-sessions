@@ -97,8 +97,8 @@ export default function IndexRoute() {
                 </div>
             </form>
         </div>
-
-        <table className="w-full text-base text-center text-black table-fixed border">
+        <div className="overflow-x">
+        <table className="w-full text-base text-center text-black table-auto border overflow-scroll">
         <thead className="text-lg text-white uppercase bg-fancyorange">
             <tr key="table-head" className="divide-x">
                 <th key="head-1"></th>
@@ -123,5 +123,6 @@ export default function IndexRoute() {
             ))}
         </tbody>
         </table>
+        </div>
     </div>
 }
