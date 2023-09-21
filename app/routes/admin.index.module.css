@@ -24,3 +24,7 @@
 .showForm {
   cursor: pointer;
 }
+
+.slotForm input {
+  border: 1px solid black;
+}

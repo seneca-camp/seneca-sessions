@@ -71,6 +71,31 @@ async function moveEntry(form: FormData) {
     return {}
 }
 
+
+async function renameEntry(form: FormData) {
+    const slot = parseInt(form.get("slot")?.toString() ?? "", 10);
+    const room = form.get("room")?.toString();
+    const name = form.get("name")?.toString();
+
+    if((name??"").trim().length ==0){
+        return {};
+    }
+
+    if (room === undefined || slot === undefined) {
+        return {}
+    }
+
+    const source = await db.session.findFirst({ where: { room, slot }, })
+
+    if(source === null) {
+        return {}
+    }
+
+    await db.session.update({data: {name},  where: { id: source.id }, })
+
+    return {}
+}
+
 export const action = async ({
     request,
 }: ActionFunctionArgs) => {
@@ -85,6 +110,9 @@ export const action = async ({
     }
     else if (type === "move") {
         return await moveEntry(form)
+    }
+    else if (type === "rename") {
+        return await renameEntry(form)
     }
 };
 
@@ -163,7 +191,11 @@ export default function IndexRoute() {
                         <tr className="min-h-100 divide-x" key={"row" + id}>
                             <td className="text-lg font-bold" key={id}>{time}</td>
                             {getEntriesForSlot(id, sessiondata.sessions).map(({ name, slot, room }) => (
-                                <td key={id + slot}><p>{name} {(name !== "") ? <><DeleteForm id={id} room={room} /> <MoveForm id={id} room={room} allSlots={slots} /></> : ""}</p></td>
+                                <td key={id + slot}><p>{name} {(name !== "") ? <>
+                                <DeleteForm id={id} room={room} />
+                                <MoveForm id={id} room={room} allSlots={slots} />
+                                <RenameForm id={id} room={room} name={name} />
+                                </> : ""}</p></td>
                             ))}
                         </tr>
                     ))}
@@ -177,7 +209,7 @@ function DeleteForm(props: { id: number, room: string }) {
     const [isCollapsed, setCollapsed] = useState(true)
 
     return <form className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`} method="post" action="/admin/">
-        <span className={style.showForm} onClick={() => setCollapsed(!isCollapsed)}>Diesen Slot leeren:</span>
+        <span className={style.showForm} onClick={() => setCollapsed(!isCollapsed)}>Session löschen:</span>
         <input type="hidden" name="type" value="delete" />
         <input type="hidden" name="slot" value={props.id} />
         <input type="hidden" name="room" value={props.room} />
@@ -189,7 +221,7 @@ function MoveForm(props: { allSlots: Slot[], id: number, room: string }) {
     const [isCollapsed, setCollapsed] = useState(true)
 
     return <form className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`} method="post" action="/admin/">
-        <span className={style.showForm} onClick={() => { setCollapsed(!isCollapsed) }}>Diese Session verschieben/tauschen:</span>
+        <span className={style.showForm} onClick={() => { setCollapsed(!isCollapsed) }}>Session verschieben:</span>
         <input type="hidden" name="type" value="move" />
         <input type="hidden" name="fromSlot" value={props.id} />
         <input type="hidden" name="fromRoom" value={props.room} />
@@ -204,5 +236,19 @@ function MoveForm(props: { allSlots: Slot[], id: number, room: string }) {
             ))}
         </select></label>
         <button type="submit">Move/Swap</button>
+    </form>
+}
+
+function RenameForm(props: { id: number,  room: string, name: string }) {
+    const [isCollapsed, setCollapsed] = useState(true)
+
+    return <form className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`} method="post" action="/admin/">
+        <span className={style.showForm} onClick={() => { setCollapsed(!isCollapsed) }}>Session umbenennen:</span>
+        <input type="hidden" name="type" value="rename" />
+        <input type="hidden" name="slot" value={props.id} />
+        <input type="hidden" name="room" value={props.room} />
+        <input type="text" name="name" defaultValue={props.name} />
+        
+        <button type="submit">Umbenennen</button>
     </form>
 }
