@@ -1,5 +1,4 @@
-import { rooms } from "~/utils/rooms";
-import { slots } from "~/utils/slots";
+import { rooms } from '~/utils/rooms';
 
 export type Entry = {
     slot: number,
@@ -7,16 +6,16 @@ export type Entry = {
     room: string,
 }
 
-export function getCorrectSession(room: string, slot: number, entries: [Entry]): string {
+export function getCorrectSession(room: string, slot: number, entries: Entry[]): string {
     const entry = entries.find(element => element.room === room && element.slot === slot);
     return (entry !== undefined ? entry.name : "");
 }
 
-export function getEntriesForSlot(slot: number, entries: [Entry]): Entry[] {
+export function getEntriesForSlot(slot: number, entries: Entry[]): Entry[] {
     let entryNames: Entry[] = [];
     rooms.forEach(room => {
         const name = getCorrectSession(room, slot, entries);
-        entryNames.push({name: name, room: room, slot: slot})
+        entryNames.push({ name: name, room: room, slot: slot })
     })
     return entryNames;
 }

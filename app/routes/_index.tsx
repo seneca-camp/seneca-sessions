@@ -1,38 +1,42 @@
-import { rooms } from "~/utils/rooms";
-import { slots } from "~/utils/slots";
-import { useLoaderData } from "react-router";
-import { json } from "@remix-run/node";
-import { db } from "~/utils/db.server";
-import { Entry, getCorrectSession, getEntriesForSlot } from "~/utils/sessionsearcher";
+
+import { db } from '~/utils/db.server';
+import { rooms } from '~/utils/rooms';
+import { getEntriesForSlot } from '~/utils/sessionsearcher';
+import { slots } from '~/utils/slots';
+
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+
+import styles from './index.module.css';
 
 export const loader = async () => {
     return json({
-      sessions: await db.session.findMany(),
+        sessions: await db.session.findMany(),
     });
 };
 
 export default function IndexRoute() {
     const sessiondata = useLoaderData<typeof loader>();
-    return <div className="overflow-x">
-        <table className="w-full text-base text-center text-black table-auto border overflow-scroll">
-        <thead className="text-lg text-white uppercase bg-fancyorange">
-            <tr key="table-head" className="divide-x min-width-fit">
-                <th key="head-1" ></th>
-                {rooms.map((room) => (
-                    <th key={room}>{room}</th>
-                ))}
-            </tr> 
-        </thead>
-        <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole [&>*:nth-child(odd)]:text-white [&>*:nth-child(even)]:bg-white">
-            {slots.map((slotFull) => (
-                <tr className="min-h-100 divide-x min-width-fit" key={"row"+slotFull.id}>
-                    <td className="text-lg font-bold" key={slotFull.id}>{slotFull.time}</td>
-                    {getEntriesForSlot(slotFull.id, sessiondata.sessions).map(({name, slot, room}) => (
-                        <td key={slotFull.id + name}><p>{name}</p></td>
+    return <main className={styles.sessionsTableWrapper}>
+        <table className={styles.sessionTable}>
+            <thead className="text-lg text-white uppercase">
+                <tr key="table-head" className="min-width-fit">
+                    <th className={styles.roomName} key="head-1" ></th>
+                    {rooms.map((room) => (
+                        <th className={styles.roomName} key={room}>{room}</th>
                     ))}
                 </tr>
-            ))}
-        </tbody>
+            </thead>
+            <tbody>
+                {slots.map((slotFull) => (
+                    <tr className="min-h-100 min-width-fit" key={"row" + slotFull.id}>
+                        <th className={styles.sessionTime} key={slotFull.id}>{slotFull.time}</th>
+                        {getEntriesForSlot(slotFull.id, sessiondata?.sessions ?? []).map(({ name, slot, room }) => (
+                            <td className={styles.sessionName} key={slotFull.id + name}><p>{name}</p></td>
+                        ))}
+                    </tr>
+                ))}
+            </tbody>
         </table>
-    </div>
+    </main>
 }
