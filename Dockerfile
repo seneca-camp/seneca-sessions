@@ -5,8 +5,9 @@ WORKDIR /app/
 RUN apt-get update && apt-get install -y openssl sqlite3
 
 COPY ./package.json ./
+COPY ./package-lock.json ./
 
-RUN npm install
+RUN npm ci --legacy-peer-deps
 
 ENV DATABASE_URL="file:/appdb/production.db"
 
