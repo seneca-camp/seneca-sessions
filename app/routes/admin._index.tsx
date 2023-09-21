@@ -108,7 +108,12 @@ export default function IndexRoute() {
                 </div>
                 <div>
                     <label className="block text-gray-700 text-md font-bold mb-2">
-                        Slot: <input type="number" name="slot" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min={slots[0].id} max={slots.slice(-1)[0].id} defaultValue={actionData?.message ? actionData.slot : ""} />
+                        Slot:
+                        <select name="slot" defaultValue={actionData?.message ? actionData.slot : ""}>
+                            {slots.map((slot) => (
+                                <option key={slot.id} value={slot.id}>{slot.time}</option>
+                            ))}
+                        </select>
                     </label>
                 </div>
                 <div>
@@ -141,7 +146,7 @@ export default function IndexRoute() {
                 <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole  [&>*:nth-child(even)]:bg-white">
                     {slots.map(({ id, time }) => (
                         <tr className="min-h-100 divide-x" key={"row" + id}>
-                            <td className="text-lg font-bold" key={id}>{time} #{id}</td>
+                            <td className="text-lg font-bold" key={id}>{time}</td>
                             {getEntriesForSlot(id, sessiondata.sessions).map(({ name, slot, room }) => (
                                 <td key={id + name}><p>{name} {(name !== "") ? <><DeleteForm id={id} room={room} /> <MoveForm id={id} room={room} allSlots={slots} /></> : ""}</p></td>
                             ))}
@@ -169,11 +174,15 @@ function MoveForm(props: { allSlots: Slot[], id: number, room: string }) {
     const [isCollapsed, setCollapsed] = useState(true)
 
     return <form className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`} method="post" action="/admin/">
-        <span className={style.showForm} onClick={() => { setCollapsed(!isCollapsed) }}>Diese Session verschieben:</span>
+        <span className={style.showForm} onClick={() => { setCollapsed(!isCollapsed) }}>Diese Session verschieben/tauschen:</span>
         <input type="hidden" name="type" value="move" />
         <input type="hidden" name="fromSlot" value={props.id} />
         <input type="hidden" name="fromRoom" value={props.room} />
-        <label>Slot: <input type="number" name="toSlot" defaultValue={props.id} /></label>
+        <label>Slot: <select name="toSlot" defaultValue={props.id}>
+            {slots.map((slot) => (
+                <option key={slot.id} value={slot.id}>{slot.time}</option>
+            ))}
+        </select></label>
         <label>Raum: <select name="toRoom" defaultValue={props.room}>
             {rooms.map((room) => (
                 <option key={"r" + room} value={room}>{room}</option>
