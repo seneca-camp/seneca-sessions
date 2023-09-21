@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { db } from '~/utils/db.server';
 import { rooms } from '~/utils/rooms';
 import { Entry, getEntriesForSlot } from '~/utils/sessionsearcher';
 import { Slot, slots } from '~/utils/slots';
 
 import { json } from '@remix-run/node';
-import { useActionData, useLoaderData } from '@remix-run/react';
+import { useActionData, useLoaderData, useRevalidator } from '@remix-run/react';
 
 import style from './admin.index.module.css';
 
 import type { ActionFunctionArgs } from "@remix-run/node";
+import { useInterval } from '~/utils/interval-hook';
 async function saveEntry(entry: Entry): boolean {
     const exists = await db.session.count({ where: { slot: entry.slot, room: entry.room } })
     if (exists) {
@@ -97,6 +98,20 @@ export const loader = async () => {
 export default function IndexRoute() {
     const actionData = useActionData<typeof action>();
     const sessiondata = useLoaderData<typeof loader>();
+
+
+    if(typeof document !== "undefined") {
+        const revalidator = useRevalidator();
+        const [shouldRevalidate, setShouldRevalidate] = useState(true)
+        useEffect(() => window.addEventListener("focus", () => {
+            setShouldRevalidate(true);
+            revalidator.revalidate();
+        }), [])
+        useEffect(() => window.addEventListener("blur", () => setShouldRevalidate(false)), [])
+        useInterval(revalidator.revalidate, shouldRevalidate ? 1000 : null);
+    }
+
+
     return <div><h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-grey">Edit Mode</h1>
         <div>
             {actionData ? <p className="text-deeppurple">{actionData.message}</p> : ""}
@@ -148,7 +163,7 @@ export default function IndexRoute() {
                         <tr className="min-h-100 divide-x" key={"row" + id}>
                             <td className="text-lg font-bold" key={id}>{time}</td>
                             {getEntriesForSlot(id, sessiondata.sessions).map(({ name, slot, room }) => (
-                                <td key={id + name}><p>{name} {(name !== "") ? <><DeleteForm id={id} room={room} /> <MoveForm id={id} room={room} allSlots={slots} /></> : ""}</p></td>
+                                <td key={id + slot}><p>{name} {(name !== "") ? <><DeleteForm id={id} room={room} /> <MoveForm id={id} room={room} allSlots={slots} /></> : ""}</p></td>
                             ))}
                         </tr>
                     ))}
