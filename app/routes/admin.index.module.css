@@ -1,0 +1,26 @@
+.slotForm {
+  border: 1px solid black;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.slotForm button {
+  border: 1px solid black;
+  background-color: red;
+  padding: 4px
+}
+
+.slotForm.collapsed {
+  overflow: hidden;
+  max-height: 1.8em;
+}
+.slotForm.uncollapsed {
+  overflow: hidden;
+  max-height: 9999px
+}
+
+.showForm {
+  cursor: pointer;
+}

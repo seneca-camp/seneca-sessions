@@ -3,7 +3,7 @@ import logo from '~/gfx/logo.png';
 import stylesheet from '~/tailwind.css';
 
 import { cssBundleHref } from '@remix-run/css-bundle';
-import { Links, LiveReload, Outlet } from '@remix-run/react';
+import { Links, LiveReload, Outlet, Scripts } from '@remix-run/react';
 
 import style from './root.module.css';
 
@@ -27,6 +27,7 @@ export default function App() {
           content="width=device-width, initial-scale=1"
         />
         <Links />
+        <Scripts />
         <title>Seneca Sessions</title>
       </head>
       <body className="p-4">
