@@ -7,9 +7,10 @@ import { getEntriesForSlot } from '~/utils/sessionsearcher';
 import { slots } from '~/utils/slots';
 
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useRevalidator } from '@remix-run/react';
 
 import styles from './index.module.css';
+import { useInterval } from '~/utils/interval-hook';
 
 export const loader = async () => {
     return json({
@@ -38,6 +39,16 @@ export default function IndexRoute() {
         return;
     }
 
+    if(typeof document !== "undefined") {
+        const revalidator = useRevalidator();
+        const [shouldRevalidate, setShouldRevalidate] = useState(true)
+        useEffect(() => window.addEventListener("focus", () => {
+            setShouldRevalidate(true);
+            revalidator.revalidate();
+        }), [])
+        useEffect(() => window.addEventListener("blur", () => setShouldRevalidate(false)), [])
+        useInterval(revalidator.revalidate, shouldRevalidate ? 5000 : null);
+    }
 
     return <main className={styles.sessionsTableWrapper}>
         <table className={styles.sessionTable}>
