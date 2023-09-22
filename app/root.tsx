@@ -36,7 +36,7 @@ export default function App() {
           <h1 className={style.headline}>Sessions</h1>
         </header>
         <Outlet />
-        <p className="text-white text-center"><a href="https://twitter.com/search?q=%23seneca2023">#seneca2023</a></p>
+        <p className="text-white text-center"><a href="https://twitter.com/search?q=%23seneca2023">#seneca2023</a> <a href="https://seneca.camp/impressum/">Impressum</a></p>
         <LiveReload />
       </body>
     </html>
