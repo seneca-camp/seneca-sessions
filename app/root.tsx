@@ -33,7 +33,7 @@ export default function App() {
       <body className="p-4">
         <header style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
           <Logo />
-          <h1 className={style.headline}>Sessions</h1>
+          <nav><a href="/" className={style.headline}>Sessions</a> | <a href="/rooms" className={style.headline}>Raumplan</a></nav>
         </header>
         <Outlet />
         <p className="text-white text-center"><a href="https://twitter.com/search?q=%23seneca2023">#seneca2023</a> <a href="https://seneca.camp/impressum/">Impressum</a></p>
