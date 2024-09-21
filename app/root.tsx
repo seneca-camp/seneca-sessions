@@ -36,7 +36,7 @@ export default function App() {
           <nav><a href="/" className={style.headline}>Sessions</a> | <a href="/rooms" className={style.headline}>Raumplan</a></nav>
         </header>
         <Outlet />
-        <p className="text-white text-center"><a href="https://twitter.com/search?q=%23seneca2023">#seneca2023</a> <a href="https://seneca.camp/impressum/">Impressum</a></p>
+        <p className="text-white text-center">#seneca2024 <a href="https://seneca.camp/impressum/">Impressum</a></p>
         <LiveReload />
       </body>
     </html>

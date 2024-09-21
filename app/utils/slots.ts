@@ -11,3 +11,11 @@ export const slots: Slot[] = [
     {id: 5, time: "16:00 - 16:45"},
     {id: 6, time: "17:00 - 17:45"},
 ]
+
+/*
+export const slots: Slot[] = [
+    {id: 0, time: "10:00 - 10:45"},
+    {id: 1, time: "11:00 - 11:45"},
+    {id: 2, time: "12:00 - 12:45"},
+]
+*/
