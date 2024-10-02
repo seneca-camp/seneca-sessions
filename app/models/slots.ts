@@ -2,6 +2,7 @@ export type Slot = {
     id: number,
     time: string,
 }
+
 export const slots: Slot[] = [
     {id: 0, time: "11:00 - 11:45"},
     {id: 1, time: "12:00 - 12:45"},

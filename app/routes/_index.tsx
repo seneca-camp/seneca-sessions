@@ -1,10 +1,9 @@
-
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useHydrated } from 'remix-utils/use-hydrated';
 import { db } from '~/utils/db.server';
-import { rooms } from '~/utils/rooms';
-import { getEntriesForSlot } from '~/utils/sessionsearcher';
-import { slots } from '~/utils/slots';
+import { rooms } from '~/models/rooms';
+import { slots } from '~/models/slots';
+import { getSessionsForSlot } from '~/utils/sessionsearcher';
 
 import { json } from '@remix-run/node';
 import { useLoaderData, useRevalidator } from '@remix-run/react';
@@ -26,8 +25,8 @@ export default function IndexRoute() {
     const isHydrated = useHydrated(); // oh god this is so hacky
     const isLiked = (id: number | undefined) => isHydrated && likedSessionIds.includes(id ?? -1)
 
-    const toggleLikedness = (id: number | undefined, name: string) => {
-        if (id === undefined || name === "") { // wtf? why can there be an id with name as emptystring randomly?
+    const toggleLikedness = (id: number | undefined, title: string) => {
+        if (id === undefined || title === "") { // wtf? why can there be an id with name as emptystring randomly?
             return;
         }
 
@@ -64,14 +63,14 @@ export default function IndexRoute() {
                 {slots.map((slotFull) => (
                     <tr className="min-h-100 min-width-fit" key={"row" + slotFull.id}>
                         <th className={styles.sessionTime} key={slotFull.id}>{slotFull.time}</th>
-                        {getEntriesForSlot(slotFull.id, sessiondata.sessions).map(({ id, name, slot, room }) => (
+                        {getSessionsForSlot(slotFull.id, sessiondata.sessions).map(({ id, title, slot, room }) => (
                             <td
-                                onClick={() => { toggleLikedness(id, name); }}
-                                className={`${styles.sessionName} ${isLiked(id) ? styles.likedSession : ""} ${id !== undefined && name !== "" ? styles.hasContent : ''}`}
+                                onClick={() => { toggleLikedness(id, title); }}
+                                className={`${styles.sessionName} ${isLiked(id) ? styles.likedSession : ""} ${id !== undefined && title !== "" ? styles.hasContent : ''}`}
                                 key={slotFull.id + room}
                                 data-sessionid={id}
                             >
-                                <p>{name}</p>
+                                <p>{title}</p>
                             </td>
                         ))}
                     </tr>
