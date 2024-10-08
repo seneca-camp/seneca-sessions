@@ -32,7 +32,7 @@ async function saveSession(session: Prisma.SessionCreateInput): Promise<boolean>
     return true
 }
 
-export async function deleteSession(form: FormData): Promise<any> {
+export async function deleteSession(form: FormData) {
     const slot = +String(form.get("slot"));
     const room = String(form.get("room"));
 
