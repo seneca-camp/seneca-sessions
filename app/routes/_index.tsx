@@ -3,7 +3,6 @@ import { useHydrated } from 'remix-utils/use-hydrated';
 import { db } from '~/utils/db.server';
 import { rooms } from '~/models/rooms';
 import { slots } from '~/models/slots';
-import { getSessionsForSlot } from '~/utils/sessionsearcher';
 
 import { json } from '@remix-run/node';
 import { useLoaderData, useRevalidator } from '@remix-run/react';
@@ -19,25 +18,20 @@ export const loader = async () => {
 export default function IndexRoute() {
     const sessions = useLoaderData<typeof loader>();
 
-    const [likedSessionIds, setLikedSessionIds] = usePersistedState<number[]>([], "liked-session-ids")
+    const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>([], "liked-session-ids")
 
     const isHydrated = useHydrated(); // oh god this is so hacky
-    const isLiked = (id: number | undefined) => isHydrated && likedSessionIds.includes(id ?? -1)
+    const isLiked = (sessionId: string) => isHydrated && likedSessionIds.includes(sessionId);
 
-    const toggleLikedness = (id: number | undefined, title: string) => {
-        if (id === undefined || title === "") { // wtf? why can there be an id with name as emptystring randomly?
-            return;
-        }
-
-        if (isLiked(id)) {
-            setLikedSessionIds(likedSessionIds.filter((value) => value !== id));
+    const toggleLikedness = (sessionId: string) => {
+        if (isLiked(sessionId)) {
+            setLikedSessionIds(likedSessionIds.filter((value) => value !== sessionId));
         } else {
-            setLikedSessionIds([...likedSessionIds, id])
+            setLikedSessionIds([...likedSessionIds, sessionId])
         }
-        return;
     }
 
-    if(typeof document !== "undefined") {
+    if (typeof document !== "undefined") {
         const revalidator = useRevalidator();
         const [shouldRevalidate, setShouldRevalidate] = useState(true)
         useEffect(() => window.addEventListener("focus", () => {
