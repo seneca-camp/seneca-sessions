@@ -1,5 +1,5 @@
 import type { LinksFunction } from "@remix-run/node";
-import logo from '~/gfx/logo.png';
+import logo from '~/assets/logo.png';
 import stylesheet from '~/tailwind.css';
 
 import { cssBundleHref } from '@remix-run/css-bundle';

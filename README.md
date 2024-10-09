@@ -2,6 +2,11 @@
 
 - [Remix Docs](https://remix.run/docs)
 
+## Setup
+
+* Run `cp .env-example .env` and set your own env variables
+* Run `npm install` to install all dependencies
+
 ## Development
 
 From your terminal:
