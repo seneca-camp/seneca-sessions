@@ -1,8 +1,8 @@
-FROM node:latest as base
+FROM node:alpine as base
 
 WORKDIR /app/
 
-RUN apt-get update && apt-get install -y openssl sqlite3
+RUN apk add openssl sqlite
 
 COPY ./package.json ./
 COPY ./package-lock.json ./
