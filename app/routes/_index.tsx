@@ -3,7 +3,6 @@ import { useHydrated } from 'remix-utils/use-hydrated';
 import { db } from '~/utils/db.server';
 import { rooms } from '~/models/rooms';
 import { slots } from '~/models/slots';
-import { getSessionsForSlot } from '~/utils/sessionsearcher';
 
 import { json } from '@remix-run/node';
 import { useLoaderData, useRevalidator } from '@remix-run/react';
@@ -12,33 +11,27 @@ import styles from './index.module.css';
 import { useInterval } from '~/utils/interval-hook';
 
 export const loader = async () => {
-    return json({
-        sessions: await db.session.findMany(),
-    });
+    const sessions = await db.session.findMany();
+    return json(sessions);
 };
 
 export default function IndexRoute() {
-    const sessiondata = useLoaderData<typeof loader>();
+    const sessions = useLoaderData<typeof loader>();
 
-    const [likedSessionIds, setLikedSessionIds] = usePersistedState<number[]>([], "liked-session-ids")
+    const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>([], "liked-session-ids")
 
     const isHydrated = useHydrated(); // oh god this is so hacky
-    const isLiked = (id: number | undefined) => isHydrated && likedSessionIds.includes(id ?? -1)
+    const isLiked = (sessionId: string) => isHydrated && likedSessionIds.includes(sessionId);
 
-    const toggleLikedness = (id: number | undefined, title: string) => {
-        if (id === undefined || title === "") { // wtf? why can there be an id with name as emptystring randomly?
-            return;
-        }
-
-        if (isLiked(id)) {
-            setLikedSessionIds(likedSessionIds.filter((value) => value !== id));
+    const toggleLikedness = (sessionId: string) => {
+        if (isLiked(sessionId)) {
+            setLikedSessionIds(likedSessionIds.filter((value) => value !== sessionId));
         } else {
-            setLikedSessionIds([...likedSessionIds, id])
+            setLikedSessionIds([...likedSessionIds, sessionId])
         }
-        return;
     }
 
-    if(typeof document !== "undefined") {
+    if (typeof document !== "undefined") {
         const revalidator = useRevalidator();
         const [shouldRevalidate, setShouldRevalidate] = useState(true)
         useEffect(() => window.addEventListener("focus", () => {
@@ -60,19 +53,23 @@ export default function IndexRoute() {
                 </tr>
             </thead>
             <tbody>
-                {slots.map((slotFull) => (
-                    <tr className="min-h-100 min-width-fit" key={"row" + slotFull.id}>
-                        <th className={styles.sessionTime} key={slotFull.id}>{slotFull.time}</th>
-                        {getSessionsForSlot(slotFull.id, sessiondata.sessions).map(({ id, title, slot, room }) => (
-                            <td
-                                onClick={() => { toggleLikedness(id, title); }}
-                                className={`${styles.sessionName} ${isLiked(id) ? styles.likedSession : ""} ${id !== undefined && title !== "" ? styles.hasContent : ''}`}
-                                key={slotFull.id + room}
-                                data-sessionid={id}
+                {slots.map(({ id: slotId, time }) => (
+                    <tr className="min-h-100 min-width-fit" key={"row" + slotId}>
+                        <th className={styles.sessionTime}>{time}</th>
+                        {rooms.map((room, roomIndex) => {
+                            const session = sessions.filter(s => s.room === room && s.slot === slotId)[0];
+                            if (!session) {
+                                return <td key={`slot-${slotId}-room-${roomIndex}`} className={styles.sessionName}></td>;
+                            }
+                            return <td
+                                onClick={() => toggleLikedness(session.id)}
+                                className={`${styles.sessionName} ${styles.hasContent} ${isLiked(session.id) ? styles.likedSession : ""}`}
+                                key={session.id}
+                                data-sessionid={session.id}
                             >
-                                <p>{title}</p>
+                                <p>{session.title}</p>
                             </td>
-                        ))}
+                        })}
                     </tr>
                 ))}
             </tbody>

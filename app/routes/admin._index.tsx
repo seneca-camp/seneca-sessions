@@ -32,13 +32,13 @@ export const action = async ({
 
 export const loader = async () => {
     const sessions = await getAllSessions();
-    return json({ sessions });
+    return json(sessions);
 };
 
 
 export default function IndexRoute() {
     const actionData = useActionData<typeof action>();
-    const sessiondata = useLoaderData<typeof loader>();
+    const sessions = useLoaderData<typeof loader>();
 
 
     if (typeof document !== "undefined") {
@@ -100,16 +100,21 @@ export default function IndexRoute() {
                     </tr>
                 </thead>
                 <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole  [&>*:nth-child(even)]:bg-white">
-                    {slots.map(({ id, time }) => (
-                        <tr className="min-h-100 divide-x" key={"row" + id}>
-                            <td className="text-lg font-bold" key={id}>{time}</td>
-                            {getSessionsForSlot(id, sessiondata.sessions).map(({ title, slot, room }) => (
-                                <td key={id + slot}><p>{title} {(title !== "") ? <>
-                                    <DeleteForm id={id} room={room} />
-                                    <MoveForm id={id} room={room} allSlots={slots} />
-                                    <RenameForm id={id} room={room} name={title} />
-                                </> : ""}</p></td>
-                            ))}
+                    {slots.map(({ id: slotId, time }) => (
+                        <tr className="min-h-100 divide-x" key={"row-" + slotId}>
+                            <td className="text-lg font-bold">{time}</td>
+                            {rooms.map((room, roomIndex) => {
+                                const session = sessions.filter(s => s.room === room && s.slot === slotId)[0];
+                                if (!session) {
+                                    return <td key={`slot-${slotId}-room-${roomIndex}`}></td>;
+                                }
+                                return <td key={session.id}>
+                                    <p>{session.title}</p>
+                                    <DeleteForm id={slotId} room={room} />
+                                    <MoveForm id={slotId} room={room} allSlots={slots} />
+                                    <RenameForm id={slotId} room={room} title={session.title} />
+                                </td>
+                            })}
                         </tr>
                     ))}
                 </tbody>
