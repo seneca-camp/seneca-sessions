@@ -2,7 +2,7 @@ FROM node:alpine as base
 
 WORKDIR /app/
 
-RUN apk add openssl sqlite
+RUN apk add sqlite
 
 COPY ./package.json ./
 COPY ./package-lock.json ./
