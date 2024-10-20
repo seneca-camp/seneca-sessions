@@ -9,7 +9,7 @@ COPY ./package-lock.json ./
 
 RUN npm ci --legacy-peer-deps
 
-ENV DATABASE_URL="file:/appdb/production.db"
+ENV DATABASE_URL="file:/appdb/db.sqlite"
 
 ADD prisma ./prisma
 RUN npx prisma generate
