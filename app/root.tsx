@@ -1,9 +1,9 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from 'react-router';
 import logo from '~/assets/logo.png';
 import stylesheet from '~/tailwind.css';
 
-import { cssBundleHref } from '@remix-run/css-bundle';
-import { Links, LiveReload, Outlet, Scripts } from '@remix-run/react';
+import { cssBundleHref } from '@react-router/css-bundle';
+import { Links, LiveReload, Outlet, Scripts } from 'react-router';
 
 import style from './root.module.css';
 

@@ -4,8 +4,8 @@ import { db } from '~/utils/db.server';
 import { rooms } from '~/models/rooms';
 import { slots } from '~/models/slots';
 
-import { json } from '@remix-run/node';
-import { useLoaderData, useRevalidator } from '@remix-run/react';
+import { json } from 'react-router';
+import { useLoaderData, useRevalidator } from 'react-router';
 
 import styles from './index.module.css';
 import { useInterval } from '~/utils/interval-hook';

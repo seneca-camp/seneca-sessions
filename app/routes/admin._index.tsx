@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { json } from '@remix-run/node';
-import { useActionData, useLoaderData, useRevalidator } from '@remix-run/react';
-import type { ActionFunctionArgs } from "@remix-run/node";
+import { json } from 'react-router';
+import { useActionData, useLoaderData, useRevalidator } from 'react-router';
+import type { ActionFunctionArgs } from 'react-router';
 import { useInterval } from '~/utils/interval-hook';
 
 import style from './admin.index.module.css';
