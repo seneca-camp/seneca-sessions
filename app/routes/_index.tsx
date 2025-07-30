@@ -4,15 +4,14 @@ import { db } from '~/utils/db.server';
 import { rooms } from '~/models/rooms';
 import { slots } from '~/models/slots';
 
-import { json } from 'react-router';
 import { useLoaderData, useRevalidator } from 'react-router';
 
-import styles from './index.module.css';
+import styles from '../css/index.module.css';
 import { useInterval } from '~/utils/interval-hook';
 
 export const loader = async () => {
     const sessions = await db.session.findMany();
-    return json(sessions);
+    return sessions;
 };
 
 export default function IndexRoute() {

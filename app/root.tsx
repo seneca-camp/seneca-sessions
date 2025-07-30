@@ -2,14 +2,14 @@ import type { LinksFunction } from 'react-router';
 import logo from '~/assets/logo.png';
 import stylesheet from '~/tailwind.css';
 
-import { cssBundleHref } from '@react-router/css-bundle';
-import { Links, LiveReload, Outlet, Scripts } from 'react-router';
+// import { cssBundleHref } from '@react-router/css-bundle';
+import { Links, Outlet, Scripts } from 'react-router';
 
 import style from './root.module.css';
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
-  { rel: "stylesheet", href: cssBundleHref },
+  // { rel: "stylesheet", href: cssBundleHref },
   { rel: "stylesheet", href: "https://fonts.cdnfonts.com/css/cronospro" }
 ];
 
@@ -37,7 +37,7 @@ export default function App() {
         </header>
         <Outlet />
         <p className="text-white text-center">#seneca2024 <a href="https://seneca.camp/impressum/">Impressum</a></p>
-        <LiveReload />
+        {/* <LiveReload /> */}
       </body>
     </html>
   );
