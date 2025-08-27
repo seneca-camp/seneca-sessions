@@ -46,9 +46,7 @@
     --black-10: #e9e9e9;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 body, html {
     background-color: var(--black-90);

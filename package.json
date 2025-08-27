@@ -10,7 +10,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@prisma/client": "6.14.0",
+    "@prisma/client": "6.15.0",
     "@react-router/fs-routes": "7.8.2",
     "@react-router/node": "7.8.2",
     "@react-router/serve": "7.8.2",
@@ -25,10 +25,11 @@
   },
   "devDependencies": {
     "@react-router/dev": "7.8.2",
-    "@types/react": "19.1.11",
+    "@types/react": "19.1.12",
     "@types/react-dom": "19.1.8",
+    "@tailwindcss/vite": "4.1.12",
     "eslint": "9.34.0",
-    "prisma": "6.14.0",
+    "prisma": "6.15.0",
     "tailwindcss": "4.1.12",
     "typescript": "5.9.2",
     "vite-tsconfig-paths": "5.1.4"

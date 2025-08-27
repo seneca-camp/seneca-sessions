@@ -1,11 +1,11 @@
 import type { LinksFunction } from 'react-router';
-import logo from '~/assets/logo.png';
-import stylesheet from '~/tailwind.css';
+import logo from './assets/logo.png';
+import stylesheet from './css/tailwind.css';
 
 // import { cssBundleHref } from '@react-router/css-bundle';
 import { Links, Outlet, Scripts } from 'react-router';
 
-import style from './root.module.css';
+import style from './css/root.module.css';
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
