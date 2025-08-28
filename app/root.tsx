@@ -35,7 +35,6 @@ export default function App() {
         <Outlet />
         <p className="text-white text-center">#seneca2024 <a href="https://seneca.camp/impressum/">Impressum</a></p>
         <Scripts />
-        {/* <LiveReload /> */}
       </body>
     </html>
   );
