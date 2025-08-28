@@ -3,9 +3,8 @@ import { useActionData, useLoaderData, useRevalidator } from 'react-router';
 import type { ActionFunctionArgs } from 'react-router';
 import { useInterval } from '~/utils/interval-hook';
 
-import style from '../css/admin.index.module.css';
+import style from '~/css/admin.index.module.css';
 import { rooms } from '~/models/rooms';
-import { getSessionsForSlot } from '~/utils/sessionsearcher';
 import { Slot, slots } from '~/models/slots';
 import { createSession, deleteSession, getSessions as getAllSessions, moveSession, renameSession } from '~/models/sessions';
 
