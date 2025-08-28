@@ -51,7 +51,7 @@ export default function IndexRoute() {
     }
 
 
-    return <div><h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-grey">Edit Mode</h1>
+    return <div><h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">Edit Mode</h1>
         <div>
             {actionData ? <p className="text-deeppurple">{actionData.message}</p> : ""}
             <form className="max-w-md bg-white shadow-md rounded px-8 pt-12 pb-8 mb-4" method="post" action="/admin/">
