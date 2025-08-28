@@ -35,7 +35,7 @@ export const loader = async () => {
 
 
 export default function IndexRoute() {
-    const actionData = useActionData<typeof action>();
+    const actionData = useActionData();
     const sessions = useLoaderData<typeof loader>();
 
 
