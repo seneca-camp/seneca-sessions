@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { json } from '@remix-run/node';
-import { useActionData, useLoaderData, useRevalidator } from '@remix-run/react';
-import type { ActionFunctionArgs } from "@remix-run/node";
+import { useActionData, useLoaderData, useRevalidator } from 'react-router';
+import type { ActionFunctionArgs } from 'react-router';
 import { useInterval } from '~/utils/interval-hook';
 
-import style from './admin.index.module.css';
+import style from '~/css/admin.index.module.css';
 import { rooms } from '~/models/rooms';
-import { getSessionsForSlot } from '~/utils/sessionsearcher';
 import { Slot, slots } from '~/models/slots';
 import { createSession, deleteSession, getSessions as getAllSessions, moveSession, renameSession } from '~/models/sessions';
 
@@ -32,12 +30,12 @@ export const action = async ({
 
 export const loader = async () => {
     const sessions = await getAllSessions();
-    return json(sessions);
+    return sessions;
 };
 
 
 export default function IndexRoute() {
-    const actionData = useActionData<typeof action>();
+    const actionData = useActionData();
     const sessions = useLoaderData<typeof loader>();
 
 
@@ -53,7 +51,7 @@ export default function IndexRoute() {
     }
 
 
-    return <div><h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-grey">Edit Mode</h1>
+    return <div><h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">Edit Mode</h1>
         <div>
             {actionData ? <p className="text-deeppurple">{actionData.message}</p> : ""}
             <form className="max-w-md bg-white shadow-md rounded px-8 pt-12 pb-8 mb-4" method="post" action="/admin/">

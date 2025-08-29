@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
     --fancyorange: #f35c19;
     --deeppurple: #ba0946;
@@ -46,9 +48,11 @@
     --black-10: #e9e9e9;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-fancyorange: var(--fancyorange);
+  --color-brightpetrole: var(--brightpetrole);
+  --color-grey: var(--grey);
+}
 
 body, html {
     background-color: var(--black-90);

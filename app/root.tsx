@@ -1,15 +1,12 @@
-import type { LinksFunction } from "@remix-run/node";
-import logo from '~/assets/logo.png';
-import stylesheet from '~/tailwind.css';
+import type { LinksFunction } from 'react-router';
+import logo from './assets/logo.png';
+import '~/css/tailwind.css';
 
-import { cssBundleHref } from '@remix-run/css-bundle';
-import { Links, LiveReload, Outlet, Scripts } from '@remix-run/react';
+import { Links, Outlet, Scripts } from 'react-router';
 
-import style from './root.module.css';
+import styles from '~/css/root.module.css';
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
-  { rel: "stylesheet", href: cssBundleHref },
   { rel: "stylesheet", href: "https://fonts.cdnfonts.com/css/cronospro" }
 ];
 
@@ -33,11 +30,11 @@ export default function App() {
       <body className="p-4">
         <header style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
           <Logo />
-          <nav><a href="/" className={style.headline}>Sessions</a> | <a href="/rooms" className={style.headline}>Raumplan</a></nav>
+          <nav><a href="/" className={styles.headline}>Sessions</a> | <a href="/rooms" className={styles.headline}>Raumplan</a></nav>
         </header>
         <Outlet />
         <p className="text-white text-center">#seneca2024 <a href="https://seneca.camp/impressum/">Impressum</a></p>
-        <LiveReload />
+        <Scripts />
       </body>
     </html>
   );
