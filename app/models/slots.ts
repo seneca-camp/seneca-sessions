@@ -7,6 +7,7 @@ export type Day = 'SATURDAY' | 'SUNDAY';
 
 export function getDay(): Day {
     const day = new Date().getDay();
+    // Show saturday slots on every day except sunday
     if (day === 0) {
         return 'SUNDAY';
     }
