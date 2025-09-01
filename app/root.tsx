@@ -15,6 +15,7 @@ export function Logo() {
 }
 
 export default function App() {
+  const year = new Date().getFullYear();
   return (
     <html lang="en">
       <head>
@@ -33,7 +34,7 @@ export default function App() {
           <nav><a href="/" className={styles.headline}>Sessions</a> | <a href="/rooms" className={styles.headline}>Raumplan</a></nav>
         </header>
         <Outlet />
-        <p className="text-white text-center">#seneca2024 <a href="https://seneca.camp/impressum/">Impressum</a></p>
+        <p className="text-white text-center">#seneca{year} <a href="https://seneca.camp/impressum/">Impressum</a></p>
         <Scripts />
       </body>
     </html>
