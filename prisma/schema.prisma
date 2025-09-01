@@ -15,4 +15,5 @@ model Session {
   title   String
   room    String
   slot    Int
+  note    String
 }

@@ -61,12 +61,17 @@ export default function IndexRoute() {
                                 return <td key={`slot-${slotId}-room-${roomIndex}`} className={styles.sessionName}></td>;
                             }
                             return <td
-                                onClick={() => toggleLikedness(session.id)}
                                 className={`${styles.sessionName} ${styles.hasContent} ${isLiked(session.id) ? styles.likedSession : ""}`}
                                 key={session.id}
                                 data-sessionid={session.id}
                             >
-                                <p>{session.title}</p>
+                                <div
+                                    onClick={() => toggleLikedness(session.id)}
+                                    >
+                                    <p>{session.title}</p>
+                                </div>
+                                <hr />
+                                <a href={session.note} target="_blank"><div className={`text-center`}>Session Notes - 📝</div></a>
                             </td>
                         })}
                     </tr>
