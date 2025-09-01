@@ -16,4 +16,5 @@ model Session {
   room    String
   slot    Int
   note    String
+  day     String @default("SATURDAY")
 }
