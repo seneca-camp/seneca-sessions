@@ -71,7 +71,7 @@ export default function IndexRoute() {
                                     <p>{session.title}</p>
                                 </div>
                                 <hr />
-                                <a href={session.note} target="_blank"><div className={`text-center`}>📝</div></a>
+                                <a href={session.note} target="_blank"><div className={`text-center`}>Session Notes - 📝</div></a>
                             </td>
                         })}
                     </tr>

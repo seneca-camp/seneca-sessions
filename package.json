@@ -16,7 +16,7 @@
     "@react-router/serve": "7.8.2",
     "isbot": "5.1.30",
     "match-sorter": "8.1.0",
-    "nanoid": "^5.1.5",
+    "nanoid": "5.1.5",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-router": "7.8.2",
