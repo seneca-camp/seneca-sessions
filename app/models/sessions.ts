@@ -54,29 +54,31 @@ export async function deleteSession(form: FormData) {
     return {};
 }
 
+export async function switchSessions(form: FormData) {
+    const firstSessionId = form.get("firstSessionId")?.toString();
+    const secondSessionId = form.get("secondSessionId")?.toString();
+    const firstSession = await db.session.findUniqueOrThrow({ where: { id: firstSessionId } });
+    const secondSession = await db.session.findUniqueOrThrow({ where: { id: secondSessionId } });
+    const firstRoom = firstSession.room;
+    const firstSlot = firstSession.slot;
+    await db.session.update({ data: { room: secondSession.room, slot: secondSession.slot }, where: { id: firstSessionId } });
+    await db.session.update({ data: { room: firstRoom, slot: firstSlot }, where: { id: secondSessionId } });
+    return {}
+}
+
 export async function moveSession(form: FormData) {
-    const fromSlot = parseInt(form.get("fromSlot")?.toString() ?? "", 10);
-    const fromRoom = form.get("fromRoom")?.toString();
+    const sessionId = form.get("sessionId")?.toString();
     const toSlot = parseInt(form.get("toSlot")?.toString() ?? "", 10);
     const toRoom = form.get("toRoom")?.toString();
 
     // TODO: Data validation
 
-    if (isNaN(fromSlot) || fromRoom === undefined || isNaN(toSlot) || toRoom === undefined) {
+    if (isNaN(toSlot) || toRoom === undefined) {
         return {}
     }
 
-    const source = await db.session.findFirst({ where: { room: fromRoom.toString(), slot: fromSlot }, })
-    const target = await db.session.findFirst({ where: { room: toRoom, slot: toSlot }, })
-
-    if (source === null) {
-        return {}
-    }
-
-    await db.session.update({ data: { room: toRoom, slot: toSlot }, where: { id: source.id } })
-    if (target !== null) {
-        await db.session.update({ data: { room: fromRoom, slot: fromSlot }, where: { id: target.id } })
-    }
+    const session = await db.session.findUniqueOrThrow({ where: { id: sessionId } });
+    await db.session.update({ data: { room: toRoom, slot: toSlot }, where: { id: session.id } });
 
     return {}
 }
