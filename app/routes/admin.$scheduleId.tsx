@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useInterval } from "~/utils/interval-hook";
 
 import { rooms } from "~/models/rooms";
-import { getDay, slots } from "~/models/slots";
 import {
   createSession,
   deleteSession,
@@ -15,11 +14,12 @@ import {
   ActionFunctionArgs,
   useActionData,
   useLoaderData,
-  useParams,
   useRevalidator,
 } from "react-router";
 import { SessionSlot } from "~/components/SessionSlot";
 import { EmptySessionSlot } from "~/components/EmptySessionSlot";
+import { getSlots } from "~/models/slots";
+import { getSchedule } from "~/models/schedule";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
@@ -40,12 +40,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export const loader = async ({ params }: { params: { scheduleId: string } }) => {
   const sessions = await getAllSessions(params.scheduleId);
-  return sessions;
+  const schedule = await getSchedule(params.scheduleId);
+  return { sessions, schedule };
 };
 
 export default function ScheduleRoute() {
   const actionData = useActionData();
-  const sessions = useLoaderData<typeof loader>();
+  const { sessions, schedule } = useLoaderData<typeof loader>();
+  const slots = getSlots(schedule);
 
   if (typeof document !== "undefined") {
     const revalidator = useRevalidator();
@@ -99,7 +101,7 @@ export default function ScheduleRoute() {
                 name="slot"
                 defaultValue={actionData?.message ? actionData.slot : ""}
               >
-                {slots[getDay()].map((slot) => (
+                {slots.map((slot) => (
                   <option key={slot.id} value={slot.id}>
                     {slot.time}
                   </option>
@@ -146,7 +148,7 @@ export default function ScheduleRoute() {
             </tr>
           </thead>
           <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole  [&>*:nth-child(even)]:bg-white">
-            {slots[getDay()].map(({ id: slotId, time }) => (
+            {slots.map(({ id: slotId, time }) => (
               <tr className="min-h-100 divide-x" key={"row-" + slotId}>
                 <td className="text-lg font-bold" key={slotId}>
                   {time}

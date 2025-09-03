@@ -11,8 +11,8 @@ datasource db {
 }
 
 model Schedule {
-  id          String  @id @default(cuid())
-  isPublished Boolean @default(false)
+  id       String  @id @default(cuid())
+  isPublic Boolean @default(false)
 
   name     String // e.g. (Session) Saturday
   date     DateTime

@@ -33,12 +33,15 @@ export default function IndexRoute(){
         <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">Schedules</h1>
         <ul className="space-y-2">
           {schedules.map(s => (
-            <li key={s.id} className="bg-white rounded px-4 py-3 shadow">
+            <li key={s.id} className="bg-white rounded px-4 py-3 shadow flex flex-row justify-between">
               <a className="text-blue-600 hover:underline" href={`/admin/${s.id}`}>
                 {s.name}
               </a>
               <div className="text-gray-600 text-sm">
                 {new Date(s.date).toLocaleDateString()}
+              </div>
+              <div className="text-gray-600 text-sm">
+                {s.isPublic ? "Published" : "Unpublished"}
               </div>
             </li>
           ))}

@@ -7,7 +7,7 @@
 -- CreateTable
 CREATE TABLE "Schedule" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "isPublished" BOOLEAN NOT NULL DEFAULT false,
+    "isPublic" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT NOT NULL,
     "date" DATETIME NOT NULL
 );

@@ -1,10 +1,11 @@
 import { useHydrated } from 'remix-utils/use-hydrated';
-import { slots, Day } from '~/models/slots';
+import { Slot } from '~/models/slots';
 import { useLoaderData } from 'react-router';
 import styles from '../css/index.module.css';
 import { loader } from '~/routes/_index';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { rooms } from '~/models/rooms';
+import { Session } from '@prisma/client';
 
 
 type PersistedState<T> = [T, Dispatch<SetStateAction<T>>];
@@ -27,9 +28,7 @@ function usePersistedState<T>(defaultValue: T, key: string): PersistedState<T> {
     return [value, (...args) => { console.log("setting"); setValue(...args) }];
 }
 
-export function SessionTable(props: {day: Day}) {
-    const day = props.day;
-    const sessions = useLoaderData<typeof loader>();
+export function SessionTable(props: {slots: Slot[], sessions: Session[]}) {
     const isHydrated = useHydrated(); // oh god this is so hacky
     const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>([], "liked-session-ids");
     const isLiked = (sessionId: string) => isHydrated && likedSessionIds.includes(sessionId);
@@ -41,11 +40,11 @@ export function SessionTable(props: {day: Day}) {
         }
     }
 
-    return slots[day].map(({ id: slotId, time }) => (
+    return props.slots.map(({ id: slotId, time }) => (
         <tr className="min-h-100 min-width-fit" key={"row" + slotId}>
             <th className={styles.sessionTime}>{time}</th>
             {rooms.map((room, roomIndex) => {
-                const session = sessions.filter(s => s.room === room && s.slot === slotId && s.day === day)[0];
+                const session = props.sessions.filter(s => s.room === room && s.slot === slotId)[0];
                 if (!session) {
                     return <td key={`slot-${slotId}-room-${roomIndex}`} className={styles.sessionName}></td>;
                 }
