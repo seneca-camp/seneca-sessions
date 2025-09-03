@@ -2,12 +2,11 @@ import { Session } from "@prisma/client";
 import { useState } from "react";
 import { useSubmit } from "react-router";
 import style from "~/css/admin.index.module.css";
+import { DragDropCell } from "./DragDropCell";
 
 export type SessionSlotProps = {
     session: Session;
 }
-
-const enableDropping = (event: React.DragEvent<HTMLElement>) => event.preventDefault();
 
 export function SessionSlot({session}: SessionSlotProps) {
   const submit = useSubmit();
@@ -26,18 +25,16 @@ export function SessionSlot({session}: SessionSlotProps) {
   };
 
   return (
-    <td
+    <DragDropCell
       id={session.id}
       key={session.id}
-      onDragOver={enableDropping}
-      draggable={true}
       onDrop={onSessionSwitch}
       onDragStart={onSessionDragStart}
     >
       <p>{session.title}</p>
       <DeleteForm session={session} />
       <RenameForm session={session} />
-    </td>
+    </DragDropCell>
   );
 }
 

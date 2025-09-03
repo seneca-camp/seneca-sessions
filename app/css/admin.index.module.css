@@ -28,3 +28,24 @@
 .slotForm input {
   border: 1px solid black;
 }
+
+.slotCell {
+  transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease, outline-color 140ms ease;
+}
+
+.slotCell.dragging {
+  box-shadow: 0 10px 22px rgba(0,0,0,0.24);
+  transform: scale(1.02);
+  cursor: grabbing;
+}
+
+.slotCell.hoverTarget {
+  background-color: rgba(138, 43, 226, 0.10);
+  outline: 2px dashed rgba(138, 43, 226, 0.55);
+  outline-offset: -4px;
+}
+
+.slotCell.dropPulse {
+  transform: scale(0.95);
+  background-color: rgba(138, 43, 226, 0.18);
+}
