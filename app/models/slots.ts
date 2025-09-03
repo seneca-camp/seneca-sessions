@@ -3,7 +3,18 @@ export type Slot = {
     time: string,
 }
 
-export const slots: Slot[] = [
+export type Day = 'SATURDAY' | 'SUNDAY';
+
+export function getDay(): Day {
+    const day = new Date().getDay();
+    // Show saturday slots on every day except sunday
+    if (day === 0) {
+        return 'SUNDAY';
+    }
+    return 'SATURDAY';
+}
+
+export const saturdaySlots: Slot[] = [
     {id: 0, time: "11:00 - 11:45"},
     {id: 1, time: "12:00 - 12:45"},
     {id: 2, time: "13:00 - 14:00"},
@@ -13,10 +24,13 @@ export const slots: Slot[] = [
     {id: 6, time: "17:00 - 17:45"},
 ]
 
-/*
-export const slots: Slot[] = [
+export const sundaySlots: Slot[] = [
     {id: 0, time: "10:00 - 10:45"},
     {id: 1, time: "11:00 - 11:45"},
     {id: 2, time: "12:00 - 12:45"},
 ]
-*/
+
+export const slots = {
+    'SATURDAY': saturdaySlots,
+    'SUNDAY': sundaySlots,
+}

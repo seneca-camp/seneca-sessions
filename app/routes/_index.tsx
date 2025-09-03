@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useHydrated } from 'remix-utils/use-hydrated';
 import { db } from '~/utils/db.server';
 import { rooms } from '~/models/rooms';
-import { slots } from '~/models/slots';
+import { slots, getDay } from '~/models/slots';
 
 import { useLoaderData, useRevalidator } from 'react-router';
 
@@ -52,7 +52,7 @@ export default function IndexRoute() {
                 </tr>
             </thead>
             <tbody>
-                {slots.map(({ id: slotId, time }) => (
+                {slots[getDay()].map(({ id: slotId, time }) => (
                     <tr className="min-h-100 min-width-fit" key={"row" + slotId}>
                         <th className={styles.sessionTime}>{time}</th>
                         {rooms.map((room, roomIndex) => {

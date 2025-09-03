@@ -5,7 +5,7 @@ import { useInterval } from '~/utils/interval-hook';
 
 import style from '~/css/admin.index.module.css';
 import { rooms } from '~/models/rooms';
-import { Slot, slots } from '~/models/slots';
+import { Slot, slots, getDay } from '~/models/slots';
 import { createSession, deleteSession, getSessions as getAllSessions, moveSession, renameSession } from '~/models/sessions';
 
 export const action = async ({
@@ -64,7 +64,7 @@ export default function IndexRoute() {
                     <label className="block text-gray-700 text-md font-bold mb-2">
                         Slot:
                         <select name="slot" defaultValue={actionData?.message ? actionData.slot : ""}>
-                            {slots.map((slot) => (
+                            {slots[getDay()].map((slot) => (
                                 <option key={slot.id} value={slot.id}>{slot.time}</option>
                             ))}
                         </select>
@@ -98,7 +98,7 @@ export default function IndexRoute() {
                     </tr>
                 </thead>
                 <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole  [&>*:nth-child(even)]:bg-white">
-                    {slots.map(({ id: slotId, time }) => (
+                    {slots[getDay()].map(({ id: slotId, time }) => (
                         <tr className="min-h-100 divide-x" key={"row-" + slotId}>
                             <td className="text-lg font-bold">{time}</td>
                             {rooms.map((room, roomIndex) => {
@@ -109,7 +109,7 @@ export default function IndexRoute() {
                                 return <td key={session.id}>
                                     <p>{session.title}</p>
                                     <DeleteForm id={slotId} room={room} />
-                                    <MoveForm id={slotId} room={room} allSlots={slots} />
+                                    <MoveForm id={slotId} room={room} allSlots={slots[getDay()]} />
                                     <RenameForm id={slotId} room={room} title={session.title} />
                                 </td>
                             })}
@@ -142,7 +142,7 @@ function MoveForm(props: { allSlots: Slot[], id: number, room: string }) {
         <input type="hidden" name="fromSlot" value={props.id} />
         <input type="hidden" name="fromRoom" value={props.room} />
         <label>Slot: <select name="toSlot" defaultValue={props.id}>
-            {slots.map((slot) => (
+            {slots[getDay()].map((slot) => (
                 <option key={slot.id} value={slot.id}>{slot.time}</option>
             ))}
         </select></label>

@@ -1,6 +1,7 @@
 import { db } from '~/utils/db.server';
 import { Prisma, Session } from "@prisma/client";
 import { nanoid } from 'nanoid'
+import { getDay } from './slots';
 
 export async function getSessions(): Promise<Session[]> {
     return await db.session.findMany();
@@ -16,12 +17,13 @@ export async function createSession(form: FormData) {
     const slot = +String(form.get("slot"));
     const room = String(form.get("room"));
     const noteName = createNoteName();
+    const day = getDay();
     const note = new URL(noteName,'https://notes.stuve.fau.de/').toString()
 
     if (!title || !room) {
         throw Error("Missing required input!");
     }
-    const session = { slot, title, room, note };
+    const session: Prisma.SessionCreateInput = { slot, title, room, note, day };
 
     let message = null;
 
