@@ -1,6 +1,5 @@
 import { useSubmit } from "react-router";
-
-const enableDropping = (event: React.DragEvent<HTMLElement>) => event.preventDefault();
+import { DragDropCell } from "./DragDropCell";
 
 export function EmptySessionSlot(props: { slotId: number, room: string }) {
     const submit = useSubmit();
@@ -18,12 +17,13 @@ export function EmptySessionSlot(props: { slotId: number, room: string }) {
         formData.append("toRoom", room);
         await submit(formData, { method: "POST" });
     };
+
     return (
-        <td
+        <DragDropCell
+            id={`slot-${props.slotId}-room-${props.room}`}
             data-slot={props.slotId}
             data-room={props.room}
             onDrop={onSessionMove}
-            onDragOver={enableDropping}>
-        </td>
+        />
     );
 }
