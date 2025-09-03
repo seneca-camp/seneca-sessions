@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useInterval } from "~/utils/interval-hook";
 
-import style from "~/css/admin.index.module.css";
 import { rooms } from "~/models/rooms";
-import { getDay, Slot, slots } from "~/models/slots";
+import { getDay, slots } from "~/models/slots";
 import {
   createSession,
   deleteSession,
@@ -17,8 +16,9 @@ import {
   useActionData,
   useLoaderData,
   useRevalidator,
-  useSubmit,
 } from "react-router";
+import { SessionSlot } from "~/components/SessionSlot";
+import { EmptySessionSlot } from "~/components/EmptySessionSlot";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
@@ -43,7 +43,6 @@ export const loader = async () => {
 };
 
 export default function IndexRoute() {
-  const submit = useSubmit();
   const actionData = useActionData();
   const sessions = useLoaderData<typeof loader>();
 
@@ -64,38 +63,6 @@ export default function IndexRoute() {
     );
     useInterval(revalidator.revalidate, shouldRevalidate ? 1000 : null);
   }
-
-  const onSessionDragStart = (event: React.DragEvent<HTMLElement>) => {
-    event.dataTransfer.setData("sessionId", event.currentTarget.id);
-  };
-
-  const onSessionSwitch = async (event: React.DragEvent<HTMLElement>) => {
-    const firstSessionId = event.dataTransfer.getData("sessionId");
-    const secondSessionId = event.currentTarget.id;
-    const formData = new FormData();
-    formData.append("type", "switch");
-    formData.append("firstSessionId", firstSessionId);
-    formData.append("secondSessionId", secondSessionId);
-    await submit(formData, { method: "POST" });
-  };
-
-  const onSessionMove = async (event: React.DragEvent<HTMLElement>) => {
-    const sessionId = event.dataTransfer.getData("sessionId");
-    const slot = event.currentTarget.getAttribute("data-slot");
-    const room = event.currentTarget.getAttribute("data-room");
-    if (!slot || !room) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append("type", "move");
-    formData.append("sessionId", sessionId);
-    formData.append("toSlot", slot);
-    formData.append("toRoom", room);
-    await submit(formData, { method: "POST" });
-  };
-
-  const enableDropping = (event: React.DragEvent<HTMLElement>) =>
-    event.preventDefault();
 
   return (
     <div>
@@ -188,35 +155,9 @@ export default function IndexRoute() {
                     (s) => s.room === room && s.slot === slotId,
                   )[0];
                   if (!session) {
-                    return (
-                      <td
-                        key={`slot-${slotId}-room-${roomIndex}`}
-                        data-slot={slotId}
-                        data-room={room}
-                        onDrop={onSessionMove}
-                        onDragOver={enableDropping}
-                      ></td>
-                    );
+                    return <EmptySessionSlot key={`slot-${slotId}-room-${roomIndex}`} slotId={slotId} room={room} />;
                   }
-                  return (
-                    <td
-                      id={session.id}
-                      key={session.id}
-                      onDragOver={enableDropping}
-                      draggable={true}
-                      onDrop={onSessionSwitch}
-                      onDragStart={onSessionDragStart}
-                    >
-                      <p>{session.title}</p>
-                      <DeleteForm id={slotId} room={room} />
-                      <MoveForm id={slotId} room={room} allSlots={slots[getDay()]} />
-                      <RenameForm
-                        id={slotId}
-                        room={room}
-                        title={session.title}
-                      />
-                    </td>
-                  );
+                  return <SessionSlot key={session.id} session={session} />;
                 })}
               </tr>
             ))}
@@ -224,100 +165,5 @@ export default function IndexRoute() {
         </table>
       </div>
     </div>
-  );
-}
-
-function DeleteForm(props: { id: number; room: string }) {
-  const [isCollapsed, setCollapsed] = useState(true);
-
-  return (
-    <form
-      className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`}
-      method="post"
-      action="/admin/"
-    >
-      <span
-        className={style.showForm}
-        onClick={() => setCollapsed(!isCollapsed)}
-      >
-        Session löschen:
-      </span>
-      <input type="hidden" name="type" value="delete" />
-      <input type="hidden" name="slot" value={props.id} />
-      <input type="hidden" name="room" value={props.room} />
-      <button type="submit">Eintrag löschen</button>
-    </form>
-  );
-}
-
-function MoveForm(props: { allSlots: Slot[]; id: number; room: string }) {
-  const [isCollapsed, setCollapsed] = useState(true);
-
-  return (
-    <form
-      className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`}
-      method="post"
-      action="/admin/"
-    >
-      <span
-        className={style.showForm}
-        onClick={() => {
-          setCollapsed(!isCollapsed);
-        }}
-      >
-        Session verschieben:
-      </span>
-      <input type="hidden" name="type" value="move" />
-      <input type="hidden" name="fromSlot" value={props.id} />
-      <input type="hidden" name="fromRoom" value={props.room} />
-      <label>
-        Slot:{" "}
-        <select name="toSlot" defaultValue={props.id}>
-          {slots[getDay()].map((slot) => (
-            <option key={slot.id} value={slot.id}>
-              {slot.time}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Raum:{" "}
-        <select name="toRoom" defaultValue={props.room}>
-          {rooms.map((room) => (
-            <option key={"r" + room} value={room}>
-              {room}
-            </option>
-          ))}
-        </select>
-      </label>
-      <button type="submit">Move/Swap</button>
-    </form>
-  );
-}
-
-function RenameForm(props: { id: number; room: string; title: string }) {
-  const [isCollapsed, setCollapsed] = useState(true);
-
-  return (
-    <form
-      className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`}
-      method="post"
-      action="/admin/"
-    >
-      <span
-        className={style.showForm}
-        onClick={() => {
-          setCollapsed(!isCollapsed);
-        }}
-      >
-        Session umbenennen:
-      </span>
-      <input type="hidden" name="type" value="rename" />
-      <input type="hidden" name="slot" value={props.id} />
-      <input type="hidden" name="room" value={props.room} />
-      <input type="text" name="title" defaultValue={props.title} />
-
-      <button type="submit">Umbenennen</button>
-    </form>
   );
 }

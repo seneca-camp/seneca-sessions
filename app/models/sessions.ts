@@ -51,7 +51,6 @@ export async function deleteSession(form: FormData) {
         throw Error(`No session found for slot:${slot} and room:${room}`);
     }
     await db.session.delete({ where: { id: sessionToDelete.id } })
-    return {};
 }
 
 export async function switchSessions(form: FormData) {
@@ -63,7 +62,6 @@ export async function switchSessions(form: FormData) {
     const firstSlot = firstSession.slot;
     await db.session.update({ data: { room: secondSession.room, slot: secondSession.slot }, where: { id: firstSessionId } });
     await db.session.update({ data: { room: firstRoom, slot: firstSlot }, where: { id: secondSessionId } });
-    return {}
 }
 
 export async function moveSession(form: FormData) {
@@ -74,13 +72,11 @@ export async function moveSession(form: FormData) {
     // TODO: Data validation
 
     if (isNaN(toSlot) || toRoom === undefined) {
-        return {}
+        return;
     }
 
     const session = await db.session.findUniqueOrThrow({ where: { id: sessionId } });
     await db.session.update({ data: { room: toRoom, slot: toSlot }, where: { id: session.id } });
-
-    return {}
 }
 
 export async function renameSession(form: FormData) {
@@ -89,20 +85,18 @@ export async function renameSession(form: FormData) {
     const title = String(form.get("title"));
 
     if ((title ?? "").trim().length == 0) {
-        return {};
+        return;
     }
 
     if (room === undefined || slot === undefined) {
-        return {}
+        return;
     }
 
     const source = await db.session.findFirst({ where: { room, slot }, })
 
     if (source === null) {
-        return {}
+        return;
     }
 
     await db.session.update({ data: { title }, where: { id: source.id }, })
-
-    return {}
 }
