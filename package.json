@@ -7,7 +7,8 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "6.15.0",
