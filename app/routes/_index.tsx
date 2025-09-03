@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useHydrated } from 'remix-utils/use-hydrated';
 import { db } from '~/utils/db.server';
 import { rooms } from '~/models/rooms';
-import { slots, getDay } from '~/models/slots';
+import { slots, getDay, Day } from '~/models/slots';
 
 import { useLoaderData, useRevalidator } from 'react-router';
 
@@ -15,21 +15,6 @@ export const loader = async () => {
 };
 
 export default function IndexRoute() {
-    const sessions = useLoaderData<typeof loader>();
-
-    const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>([], "liked-session-ids")
-
-    const isHydrated = useHydrated(); // oh god this is so hacky
-    const isLiked = (sessionId: string) => isHydrated && likedSessionIds.includes(sessionId);
-
-    const toggleLikedness = (sessionId: string) => {
-        if (isLiked(sessionId)) {
-            setLikedSessionIds(likedSessionIds.filter((value) => value !== sessionId));
-        } else {
-            setLikedSessionIds([...likedSessionIds, sessionId])
-        }
-    }
-
     if (typeof document !== "undefined") {
         const revalidator = useRevalidator();
         const [shouldRevalidate, setShouldRevalidate] = useState(true)
@@ -52,33 +37,50 @@ export default function IndexRoute() {
                 </tr>
             </thead>
             <tbody>
-                {slots[getDay()].map(({ id: slotId, time }) => (
-                    <tr className="min-h-100 min-width-fit" key={"row" + slotId}>
-                        <th className={styles.sessionTime}>{time}</th>
-                        {rooms.map((room, roomIndex) => {
-                            const session = sessions.filter(s => s.room === room && s.slot === slotId)[0];
-                            if (!session) {
-                                return <td key={`slot-${slotId}-room-${roomIndex}`} className={styles.sessionName}></td>;
-                            }
-                            return <td
-                                className={`${styles.sessionName} ${styles.hasContent} ${isLiked(session.id) ? styles.likedSession : ""}`}
-                                key={session.id}
-                                data-sessionid={session.id}
-                            >
-                                <div
-                                    onClick={() => toggleLikedness(session.id)}
-                                    >
-                                    <p>{session.title}</p>
-                                </div>
-                                <hr />
-                                <a href={session.note} target="_blank"><div className={`text-center`}>Session Notes - 📝</div></a>
-                            </td>
-                        })}
-                    </tr>
-                ))}
+                <Sessions day={"SATURDAY"}/>
             </tbody>
         </table>
     </main>
+}
+
+function Sessions(props: {day: Day}) {
+    const day = props.day;
+    const sessions = useLoaderData<typeof loader>();
+    const isHydrated = useHydrated(); // oh god this is so hacky
+    const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>([], "liked-session-ids");
+    const isLiked = (sessionId: string) => isHydrated && likedSessionIds.includes(sessionId);
+    const toggleLikedness = (sessionId: string) => {
+        if (isLiked(sessionId)) {
+            setLikedSessionIds(likedSessionIds.filter((value) => value !== sessionId));
+        } else {
+            setLikedSessionIds([...likedSessionIds, sessionId])
+        }
+    }
+
+    return slots[day].map(({ id: slotId, time }) => (
+        <tr className="min-h-100 min-width-fit" key={"row" + slotId}>
+            <th className={styles.sessionTime}>{time}</th>
+            {rooms.map((room, roomIndex) => {
+                const session = sessions.filter(s => s.room === room && s.slot === slotId && s.day === day)[0];
+                if (!session) {
+                    return <td key={`slot-${slotId}-room-${roomIndex}`} className={styles.sessionName}></td>;
+                }
+                return <td
+                    className={`${styles.sessionName} ${styles.hasContent} ${isLiked(session.id) ? styles.likedSession : ""}`}
+                    key={session.id}
+                    data-sessionid={session.id}
+                >
+                    <div
+                        onClick={() => toggleLikedness(session.id)}
+                    >
+                        <p>{session.title}</p>
+                    </div>
+                    <hr />
+                    <a href={session.note} target="_blank"><div className={`text-center`}>Session Notes - 📝</div></a>
+                </td>
+            })}
+        </tr>
+    ))
 }
 
 
