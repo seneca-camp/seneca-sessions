@@ -1,168 +1,87 @@
-import { useEffect, useState } from "react";
-import { useInterval } from "~/utils/interval-hook";
+import { db } from "~/utils/db.server";
+import { ActionFunctionArgs, LoaderFunctionArgs, redirect, useLoaderData } from "react-router";
 
-import { rooms } from "~/models/rooms";
-import { getDay, slots } from "~/models/slots";
-import {
-  createSession,
-  deleteSession,
-  getSessions as getAllSessions,
-  moveSession,
-  renameSession,
-  switchSessions,
-} from "~/models/sessions";
-import {
-  ActionFunctionArgs,
-  useActionData,
-  useLoaderData,
-  useRevalidator,
-} from "react-router";
-import { SessionSlot } from "~/components/SessionSlot";
-import { EmptySessionSlot } from "~/components/EmptySessionSlot";
+export const loader = async (_args: LoaderFunctionArgs) => {
+  const schedules = await db.schedule.findMany({ orderBy: { date: "asc" } });
+  return schedules;
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
-  const type = form.get("type");
+  const name = form.get("name")?.toString() ?? "";
+  const dateInput = form.get("date")?.toString() ?? "";
 
-  if (type === "create") {
-    return await createSession(form);
-  } else if (type === "delete") {
-    return await deleteSession(form);
-  } else if (type === "move") {
-    return await moveSession(form);
-  } else if (type === "switch") {
-    return await switchSessions(form);
-  } else if (type === "rename") {
-    return await renameSession(form);
+  if (!name.trim() || !dateInput.trim()) {
+    return { error: "Name and date are required." };
   }
+
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) {
+    return { error: "Invalid date format." };
+  }
+
+  const schedule = await db.schedule.create({ data: { name, date } });
+  return redirect(`/admin/${schedule.id}`);
 };
 
-export const loader = async () => {
-  const sessions = await getAllSessions();
-  return sessions;
-};
-
-export default function IndexRoute() {
-  const actionData = useActionData();
-  const sessions = useLoaderData<typeof loader>();
-
-  if (typeof document !== "undefined") {
-    const revalidator = useRevalidator();
-    const [shouldRevalidate, setShouldRevalidate] = useState(true);
-    useEffect(
-      () =>
-        window.addEventListener("focus", () => {
-          setShouldRevalidate(true);
-          revalidator.revalidate();
-        }),
-      [],
-    );
-    useEffect(
-      () => window.addEventListener("blur", () => setShouldRevalidate(false)),
-      [],
-    );
-    useInterval(revalidator.revalidate, shouldRevalidate ? 1000 : null);
-  }
+export default function IndexRoute(){
+  const schedules = useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">
-        Edit Mode
-      </h1>
+    <div className="max-w-3xl mx-auto space-y-8">
       <div>
-        {actionData ? (
-          <p className="text-deeppurple">{actionData.message}</p>
-        ) : (
-          ""
-        )}
-        <form
-          className="max-w-md bg-white shadow-md rounded px-8 pt-12 pb-8 mb-4"
-          method="post"
-          action="/admin/"
-        >
-          <div>
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Title:{" "}
+        <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">Schedules</h1>
+        <ul className="space-y-2">
+          {schedules.map(s => (
+            <li key={s.id} className="bg-white rounded px-4 py-3 shadow">
+              <a className="text-blue-600 hover:underline" href={`/admin/${s.id}`}>
+                {s.name}
+              </a>
+              <div className="text-gray-600 text-sm">
+                {new Date(s.date).toLocaleDateString()}
+              </div>
+            </li>
+          ))}
+          {schedules.length === 0 && (
+            <li className="text-gray-300">No schedules yet.</li>
+          )}
+        </ul>
+      </div>
+
+      <div>
+        <h2 className="mb-2 text-xl font-semibold text-white">Create Schedule</h2>
+        <form method="post" className="bg-white shadow-md rounded px-8 pt-6 pb-8">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Name
               <input
                 type="text"
-                name="title"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                defaultValue={actionData?.message ? actionData.title : ""}
+                name="name"
+                className="mt-1 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
               />
             </label>
           </div>
-          <div>
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Slot:
-              <select
-                name="slot"
-                defaultValue={actionData?.message ? actionData.slot : ""}
-              >
-                {slots[getDay()].map((slot) => (
-                  <option key={slot.id} value={slot.id}>
-                    {slot.time}
-                  </option>
-                ))}
-              </select>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Date
+              <input
+                type="date"
+                name="date"
+                className="mt-1 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
             </label>
           </div>
-          <div>
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Room:{" "}
-              <select
-                id="room"
-                name="room"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                defaultValue={actionData?.message ? actionData.room : ""}
-              >
-                {rooms.map((room) => (
-                  <option key={"r" + room} value={room}>
-                    {room}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <input type="hidden" name="type" value="create" />
           <div>
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Add
+              Create
             </button>
           </div>
         </form>
-      </div>
-      <div className="overflow-x">
-        <table className="w-full text-base text-center text-black table-auto border overflow-scroll">
-          <thead className="text-lg text-white uppercase bg-fancyorange">
-            <tr key="table-head" className="divide-x">
-              <th key="head-1"></th>
-              {rooms.map((room) => (
-                <th key={room}>{room}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole  [&>*:nth-child(even)]:bg-white">
-            {slots[getDay()].map(({ id: slotId, time }) => (
-              <tr className="min-h-100 divide-x" key={"row-" + slotId}>
-                <td className="text-lg font-bold" key={slotId}>
-                  {time}
-                </td>
-                {rooms.map((room, roomIndex) => {
-                  const session = sessions.filter(
-                    (s) => s.room === room && s.slot === slotId,
-                  )[0];
-                  if (!session) {
-                    return <EmptySessionSlot key={`slot-${slotId}-room-${roomIndex}`} slotId={slotId} room={room} />;
-                  }
-                  return <SessionSlot key={session.id} session={session} />;
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );

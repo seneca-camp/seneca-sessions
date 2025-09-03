@@ -10,11 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Schedule {
+  id          String  @id @default(cuid())
+  isPublished Boolean @default(false)
+
+  name     String // e.g. (Session) Saturday
+  date     DateTime
+  sessions Session[]
+}
+
 model Session {
-  id      String @id @default(cuid())
-  title   String
-  room    String
-  slot    Int
-  note    String
-  day     String @default("SATURDAY")
+  id    String @id @default(cuid())
+  title String
+  room  String
+  slot  Int
+  note  String
+
+  schedule   Schedule? @relation(fields: [scheduleId], references: [id])
+  scheduleId String?
 }
