@@ -45,7 +45,7 @@ function DeleteForm({session}: { session: Session }) {
     <form
       className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`}
       method="post"
-      action="/admin/"
+      action={`${session.scheduleId}`}
     >
       <span
         className={style.showForm}
@@ -54,6 +54,7 @@ function DeleteForm({session}: { session: Session }) {
         Session löschen:
       </span>
       <input type="hidden" name="type" value="delete" />
+      <input type="hidden" name="scheduleId" value={session.scheduleId} />
       <input type="hidden" name="slot" value={session.slot} />
       <input type="hidden" name="room" value={session.room} />
       <button type="submit">Eintrag löschen</button>
@@ -68,7 +69,7 @@ function RenameForm({session}: { session: Session }) {
     <form
       className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`}
       method="post"
-      action="/admin/"
+      action={`${session.scheduleId}`}
     >
       <span
         className={style.showForm}
@@ -79,6 +80,7 @@ function RenameForm({session}: { session: Session }) {
         Session umbenennen:
       </span>
       <input type="hidden" name="type" value="rename" />
+      <input type="hidden" name="scheduleId" value={session.scheduleId} />
       <input type="hidden" name="slot" value={session.slot} />
       <input type="hidden" name="room" value={session.room} />
       <input type="text" name="title" defaultValue={session.title} />

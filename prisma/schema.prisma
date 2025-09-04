@@ -26,6 +26,6 @@ model Session {
   slot  Int
   note  String
 
-  schedule   Schedule? @relation(fields: [scheduleId], references: [id])
-  scheduleId String?
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+  scheduleId String
 }

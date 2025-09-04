@@ -2,6 +2,7 @@
   Warnings:
 
   - You are about to drop the column `day` on the `Session` table. All the data in the column will be lost.
+  - Added the required column `scheduleId` to the `Session` table without a default value. This is not possible if the table is not empty.
 
 */
 -- CreateTable
@@ -21,8 +22,8 @@ CREATE TABLE "new_Session" (
     "room" TEXT NOT NULL,
     "slot" INTEGER NOT NULL,
     "note" TEXT NOT NULL,
-    "scheduleId" TEXT,
-    CONSTRAINT "Session_scheduleId_fkey" FOREIGN KEY ("scheduleId") REFERENCES "Schedule" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "scheduleId" TEXT NOT NULL,
+    CONSTRAINT "Session_scheduleId_fkey" FOREIGN KEY ("scheduleId") REFERENCES "Schedule" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 INSERT INTO "new_Session" ("id", "note", "room", "slot", "title") SELECT "id", "note", "room", "slot", "title" FROM "Session";
 DROP TABLE "Session";

@@ -81,8 +81,9 @@ export default function ScheduleRoute() {
         <form
           className="max-w-md bg-white shadow-md rounded px-8 pt-12 pb-8 mb-4"
           method="post"
-          action="/admin/"
+          action={`/admin/schedule/${schedule.id}`}
         >
+          <input type="hidden" name="scheduleId" value={schedule.id} />
           <div>
             <label className="block text-gray-700 text-md font-bold mb-2">
               Title:{" "}

@@ -30,15 +30,14 @@ export default function IndexRoute() {
     }
 
     const { sessions, schedules } = useLoaderData<typeof loader>();
-    const [chosenSchedule, setChosenSchedule] = useState<Schedule>(schedules[-1]);
-
+    const [chosenSchedule, setChosenSchedule] = useState<Schedule>(schedules[schedules.length - 1]);
 
     return <main className={styles.sessionsTableWrapper}>
         {!chosenSchedule && <h1>No schedules available</h1>}
         {chosenSchedule && <>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+            <div className="flex flex-row justify-center items-center gap-2">
                 {schedules.map((schedule) => (
-                    <button key={schedule.id} onClick={() => setChosenSchedule(schedule)}>
+                    <button className={styles.scheduleTitle} key={schedule.id} onClick={() => setChosenSchedule(schedule)}>
                         {schedule.name}
                     </button>
                 ))}
