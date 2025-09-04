@@ -55,7 +55,9 @@ export default function IndexRoute() {
                     </span>
                   </button>
                 </form>
-                <DeleteForm id={s.id} />
+                <DeleteForm id={s.id}>
+                  <i className="ri-delete-bin-line text-2xl"></i>
+                </DeleteForm>
               </div>
             </li>
           ))}

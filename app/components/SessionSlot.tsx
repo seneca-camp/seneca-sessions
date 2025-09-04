@@ -34,7 +34,9 @@ export function SessionSlot({ session }: SessionSlotProps) {
     >
       <div className="flex p-2 flex-row items-center gap-2">
         <EditForm session={session} />
-        <DeleteForm id={session.id} />
+        <DeleteForm id={session.id}>
+          <i className="ri-delete-bin-line text-2xl"></i>
+        </DeleteForm>
       </div>
     </DragDropCell>
   );
