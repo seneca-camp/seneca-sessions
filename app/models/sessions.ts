@@ -42,12 +42,11 @@ async function saveSession(session: Prisma.SessionCreateInput): Promise<boolean>
 }
 
 export async function deleteSession(form: FormData) {
-    const slot = +String(form.get("slot"));
-    const room = String(form.get("room"));
+    const sessionId = String(form.get("id"));
 
-    const sessionToDelete = await db.session.findFirst({ where: { room, slot } });
+    const sessionToDelete = await db.session.findFirst({ where: { id: sessionId } });
     if (!sessionToDelete) {
-        throw Error(`No session found for slot:${slot} and room:${room}`);
+        throw Error(`No session found for id: ${sessionId}`);
     }
     await db.session.delete({ where: { id: sessionToDelete.id } })
 }

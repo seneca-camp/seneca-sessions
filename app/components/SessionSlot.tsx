@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSubmit } from "react-router";
 import style from "~/css/admin.index.module.css";
 import { DragDropCell } from "./DragDropCell";
+import { DeleteForm } from "./DeleteForm";
 
 export type SessionSlotProps = {
     session: Session;
@@ -31,34 +32,12 @@ export function SessionSlot({session}: SessionSlotProps) {
       onDrop={onSessionSwitch}
       onDragStart={onSessionDragStart}
     >
-      <p>{session.title}</p>
-      <DeleteForm session={session} />
+      <div className="flex p-2 flex-row items-center gap-2">
+        <p>{session.title}</p>
+        <DeleteForm id={session.id} />
+      </div>
       <RenameForm session={session} />
     </DragDropCell>
-  );
-}
-
-function DeleteForm({session}: { session: Session }) {
-  const [isCollapsed, setCollapsed] = useState(true);
-
-  return (
-    <form
-      className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`}
-      method="post"
-      action={`${session.scheduleId}`}
-    >
-      <span
-        className={style.showForm}
-        onClick={() => setCollapsed(!isCollapsed)}
-      >
-        Session löschen:
-      </span>
-      <input type="hidden" name="type" value="delete" />
-      <input type="hidden" name="scheduleId" value={session.scheduleId} />
-      <input type="hidden" name="slot" value={session.slot} />
-      <input type="hidden" name="room" value={session.room} />
-      <button type="submit">Eintrag löschen</button>
-    </form>
   );
 }
 

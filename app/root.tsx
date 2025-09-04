@@ -1,6 +1,7 @@
 import type { LinksFunction } from 'react-router';
 import logo from './assets/logo.png';
 import '~/css/tailwind.css';
+import 'remixicon/fonts/remixicon.css'
 
 import { Links, Outlet, Scripts } from 'react-router';
 

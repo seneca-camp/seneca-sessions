@@ -30,3 +30,9 @@ export async function createSchedule(form: FormData) {
 
   return await db.schedule.create({ data: { name, date } });
 }
+
+export async function deleteSchedule(form: FormData) {
+    const scheduleId = String(form.get("id"));
+    await db.session.deleteMany({ where: { scheduleId } });
+    await db.schedule.delete({ where: { id: scheduleId } });
+}
