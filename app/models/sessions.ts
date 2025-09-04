@@ -78,23 +78,12 @@ export async function moveSession(form: FormData) {
 }
 
 export async function renameSession(form: FormData) {
-    const slot = parseInt(form.get("slot")?.toString() ?? "", 10);
-    const room = String(form.get("room"));
+    const sessionId = String(form.get("id"));
     const title = String(form.get("title"));
 
     if ((title ?? "").trim().length == 0) {
         return;
     }
 
-    if (room === undefined || slot === undefined) {
-        return;
-    }
-
-    const source = await db.session.findFirst({ where: { room, slot }, })
-
-    if (source === null) {
-        return;
-    }
-
-    await db.session.update({ data: { title }, where: { id: source.id }, })
+    await db.session.update({ data: { title }, where: { id: sessionId }, })
 }
