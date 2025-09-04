@@ -6,10 +6,10 @@ import { DragDropCell } from "./DragDropCell";
 import { DeleteForm } from "./DeleteForm";
 
 export type SessionSlotProps = {
-    session: Session;
+  session: Session;
 }
 
-export function SessionSlot({session}: SessionSlotProps) {
+export function SessionSlot({ session }: SessionSlotProps) {
   const submit = useSubmit();
   const onSessionDragStart = (event: React.DragEvent<HTMLElement>) => {
     event.dataTransfer.setData("sessionId", event.currentTarget.id);
@@ -33,37 +33,27 @@ export function SessionSlot({session}: SessionSlotProps) {
       onDragStart={onSessionDragStart}
     >
       <div className="flex p-2 flex-row items-center gap-2">
-        <p>{session.title}</p>
+        <EditForm session={session} />
         <DeleteForm id={session.id} />
       </div>
-      <RenameForm session={session} />
     </DragDropCell>
   );
 }
 
-function RenameForm({session}: { session: Session }) {
-  const [isCollapsed, setCollapsed] = useState(true);
+function EditForm({ session }: { session: Session }) {
+  const [editModus, setEditModus] = useState(false);
 
   return (
-    <form
-      className={`${style.slotForm} ${isCollapsed ? style.collapsed : style.uncollapsed}`}
-      method="post"
-      action={`${session.scheduleId}`}
-    >
-      <span
-        className={style.showForm}
-        onClick={() => {
-          setCollapsed(!isCollapsed);
-        }}
-      >
-        Session umbenennen:
-      </span>
+    <form method="post" action={session.scheduleId} onSubmit={() => setEditModus(false)}>
       <input type="hidden" name="type" value="rename" />
-      <input type="hidden" name="scheduleId" value={session.scheduleId} />
-      <input type="hidden" name="slot" value={session.slot} />
-      <input type="hidden" name="room" value={session.room} />
-      <input type="text" name="title" defaultValue={session.title} />
-      <button type="submit">Umbenennen</button>
+      <input type="hidden" name="id" value={session.id} />
+      <div className="flex flex-row items-center gap-2">
+        <input className={`${editModus ? "border-b-2 border-black" : ""}`} readOnly={!editModus} type="text" name="title" defaultValue={session.title} />
+        {!editModus && <i onClick={() => setEditModus(!editModus)} className="ri-pencil-line cursor-pointer text-2xl"></i>}
+        {editModus && <button type="submit">
+          <i className="ri-check-line cursor-pointer text-2xl"></i>
+        </button>}
+      </div>
     </form>
   );
 }
