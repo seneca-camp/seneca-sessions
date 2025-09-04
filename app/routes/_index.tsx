@@ -33,7 +33,7 @@ export default function IndexRoute() {
     const [chosenSchedule, setChosenSchedule] = useState<Schedule>(schedules[schedules.length - 1]);
 
     return <main className={styles.sessionsTableWrapper}>
-        {!chosenSchedule && <h1>No schedules available</h1>}
+        {!chosenSchedule && <h1 className="text-white text-center my-8">No sessions :'(</h1>}
         {chosenSchedule && <>
             <div className="flex flex-row justify-center items-center gap-2">
                 {schedules.map((schedule) => (
