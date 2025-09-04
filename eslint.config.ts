@@ -5,6 +5,7 @@ import pluginReact from "eslint-plugin-react";
 import json from "@eslint/json";
 import markdown from "@eslint/markdown";
 import css from "@eslint/css";
+import { tailwind4 } from "tailwind-csstree";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
@@ -14,5 +15,23 @@ export default defineConfig([
   pluginReact.configs.flat['jsx-runtime'],
   { files: ["**/*.json"], plugins: { json }, language: "json/json", extends: ["json/recommended"] },
   { files: ["**/*.md"], plugins: { markdown }, language: "markdown/commonmark", extends: ["markdown/recommended"] },
-  { files: ["**/*.css"], plugins: { css }, language: "css/css", extends: ["css/recommended"] },
+  {
+    files: ["**/*.css"], plugins: { css }, language: "css/css", extends: ["css/recommended"],
+    languageOptions: {
+      customSyntax: tailwind4,
+    },
+    rules: {
+      'css/no-invalid-properties': 'off',
+      'css/use-baseline': ['error', {
+        allowProperties: ['outline'],
+      }],
+    }
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', {
+        ignoreRestSiblings: true,
+      }],
+    }
+  }
 ]);
