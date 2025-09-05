@@ -6,10 +6,10 @@ import { useLoaderData, useRevalidator } from 'react-router';
 
 import styles from '../css/index.module.css';
 import { useInterval } from '~/utils/interval-hook';
-import { SessionTable } from '~/components/SessionTable';
 import { getPublicSchedules } from '~/models/schedule';
 import { Schedule } from '@prisma/client';
 import { getSlots } from '~/models/slots';
+import { Sessions } from '~/components/Sessions';
 
 export const loader = async () => {
     const sessions = await db.session.findMany();
@@ -43,19 +43,7 @@ export default function IndexRoute() {
                         </button>
                     ))}
                 </div>
-                <table className={styles.sessionTable}>
-                    <thead className="text-lg text-white uppercase">
-                        <tr key="table-head" className="min-width-fit">
-                            <th className={styles.roomName} key="head-1" ></th>
-                            {rooms.map((room) => (
-                                <th className={styles.roomName} key={room}>{room}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <SessionTable slots={getSlots(chosenSchedule)} sessions={sessions} />
-                    </tbody>
-                </table>
+                <Sessions slots={getSlots(chosenSchedule)} sessions={sessions} />
             </>}
         </main>
     );
