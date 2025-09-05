@@ -42,12 +42,11 @@ async function saveSession(session: Prisma.SessionCreateInput): Promise<boolean>
 }
 
 export async function deleteSession(form: FormData) {
-    const slot = +String(form.get("slot"));
-    const room = String(form.get("room"));
+    const sessionId = String(form.get("id"));
 
-    const sessionToDelete = await db.session.findFirst({ where: { room, slot } });
+    const sessionToDelete = await db.session.findFirst({ where: { id: sessionId } });
     if (!sessionToDelete) {
-        throw Error(`No session found for slot:${slot} and room:${room}`);
+        throw Error(`No session found for id: ${sessionId}`);
     }
     await db.session.delete({ where: { id: sessionToDelete.id } })
 }
@@ -79,23 +78,12 @@ export async function moveSession(form: FormData) {
 }
 
 export async function renameSession(form: FormData) {
-    const slot = parseInt(form.get("slot")?.toString() ?? "", 10);
-    const room = String(form.get("room"));
+    const sessionId = String(form.get("id"));
     const title = String(form.get("title"));
 
     if ((title ?? "").trim().length == 0) {
         return;
     }
 
-    if (room === undefined || slot === undefined) {
-        return;
-    }
-
-    const source = await db.session.findFirst({ where: { room, slot }, })
-
-    if (source === null) {
-        return;
-    }
-
-    await db.session.update({ data: { title }, where: { id: source.id }, })
+    await db.session.update({ data: { title }, where: { id: sessionId }, })
 }

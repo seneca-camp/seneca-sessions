@@ -1,6 +1,7 @@
 import { db } from "~/utils/db.server";
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect, useLoaderData } from "react-router";
-import { createSchedule, toggleVisibility } from "~/models/schedule";
+import { createSchedule, deleteSchedule, toggleVisibility } from "~/models/schedule";
+import { DeleteForm } from "~/components/DeleteForm";
 
 export const loader = async (_args: LoaderFunctionArgs) => {
   const schedules = await db.schedule.findMany({ orderBy: { date: "asc" } });
@@ -13,16 +14,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (type === "toggleVisibility") {
     await toggleVisibility(form);
-  } else if (type === "create") {
+  } 
+  if (type === "create") {
     const schedule = await createSchedule(form);
     if ("error" in schedule) {
       return schedule.error;
     }
     return redirect(`/admin/schedule/${schedule.id}`);
   }
+  if (type === "delete") {
+    await deleteSchedule(form);
+  }
 };
 
-export default function IndexRoute(){
+export default function IndexRoute() {
   const schedules = useLoaderData<typeof loader>();
 
   return (
@@ -38,13 +43,22 @@ export default function IndexRoute(){
               <div className="text-gray-600 text-sm">
                 {new Date(s.date).toLocaleDateString()}
               </div>
-              <form method="post">
-                <input type="hidden" name="type" value="toggleVisibility" />
-                <input type="hidden" name="scheduleId" value={s.id} />
-                <button type="submit" className={`btn cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${s.isPublic ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-500 hover:bg-gray-700"}`}>
-                  {s.isPublic ? "Public" : "Private"}
-                </button>
-              </form>
+              <div className="flex flex-row items-center gap-2">
+                <form method="post">
+                  <input type="hidden" name="type" value="toggleVisibility" />
+                  <input type="hidden" name="scheduleId" value={s.id} />
+                  <button type="submit" className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline cursor-pointer flex flex-row items-center ${s.isPublic ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-500 hover:bg-gray-700"}`}>
+                    <input type="hidden" name="type" value="toggleVisibility" />
+                    <i className={s.isPublic ? "ri-eye-line" : "ri-eye-off-line"}></i>
+                    <span className="ml-2">
+                      {s.isPublic ? "Public" : "Private"}
+                    </span>
+                  </button>
+                </form>
+                <DeleteForm id={s.id}>
+                  <i className="ri-delete-bin-line text-2xl"></i>
+                </DeleteForm>
+              </div>
             </li>
           ))}
           {schedules.length === 0 && (
