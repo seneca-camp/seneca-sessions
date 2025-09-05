@@ -1,11 +1,13 @@
-import { Schedule } from "@prisma/client";
+import { Schedule, Session } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
 export async function getSchedule(scheduleId: string): Promise<Schedule> {
     return await db.schedule.findUniqueOrThrow({ where: { id: scheduleId } });
 }
 
-export async function getPublicSchedules(): Promise<Schedule[]> {
+export type PublicSchedule = Awaited<ReturnType<typeof getPublicSchedules>>[number];
+
+export async function getPublicSchedules() {
     return await db.schedule.findMany({ where: { isPublic: true }, orderBy: { date: "asc" }, include: { sessions: true } });
 }
 
