@@ -1,12 +1,9 @@
 import { useHydrated } from 'remix-utils/use-hydrated';
 import { Slot } from '~/models/slots';
-import { useLoaderData } from 'react-router';
 import styles from '../css/index.module.css';
-import { loader } from '~/routes/_index';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { rooms } from '~/models/rooms';
 import { Session } from '@prisma/client';
-
 
 type PersistedState<T> = [T, Dispatch<SetStateAction<T>>];
 
