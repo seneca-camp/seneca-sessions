@@ -4,8 +4,6 @@ import 'remixicon/fonts/remixicon.css'
 
 import { Links, Outlet, Scripts } from 'react-router';
 
-import styles from '~/css/root.module.css';
-
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "https://fonts.cdnfonts.com/css/cronospro" }
 ];

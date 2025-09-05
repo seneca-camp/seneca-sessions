@@ -1,12 +1,10 @@
 @import "tailwindcss";
 
 :root {
-    --fancyorange: #f35c19;
-    --deeppurple: #ba0946;
-    --brightpetrole: #00abc8;
     --black: #231f20;
     --grey: #231f20;
 
+    --fancyorange: #f35c19;
     --fancyorange-90: #f46a26;
     --fancyorange-80: #f57836;
     --fancyorange-70: #f68748;
@@ -17,6 +15,7 @@
     --fancyorange-20: #fddac0;
     --fancyorange-10: #feeddf;
 
+    --deeppurple: #ba0946;
     --deeppurple-90: #c11c50;
     --deeppurple-80: #c72f5c;
     --deeppurple-70: #ce456a;
@@ -27,6 +26,7 @@
     --deeppurple-20: #f1c3cb;
     --deeppurple-10: #f8e0e4;
 
+    --brightpetrole: #00abc8;
     --brightpetrole-90: #19b4cb;
     --brightpetrole-80: #33bccf;
     --brightpetrole-70: #4cc4d3;
@@ -50,8 +50,49 @@
 
 @theme {
   --color-fancyorange: var(--fancyorange);
+  --color-fancyorange-10: var(--fancyorange-10);
+  --color-fancyorange-20: var(--fancyorange-20);
+  --color-fancyorange-30: var(--fancyorange-30);
+  --color-fancyorange-40: var(--fancyorange-40);
+  --color-fancyorange-50: var(--fancyorange-50);
+  --color-fancyorange-60: var(--fancyorange-60);
+  --color-fancyorange-70: var(--fancyorange-70);
+  --color-fancyorange-80: var(--fancyorange-80);
+  --color-fancyorange-90: var(--fancyorange-90);
+
+  --color-deeppurple: var(--deeppurple);
+  --color-deeppurple-10: var(--deeppurple-10);
+  --color-deeppurple-20: var(--deeppurple-20);
+  --color-deeppurple-30: var(--deeppurple-30);
+  --color-deeppurple-40: var(--deeppurple-40);
+  --color-deeppurple-50: var(--deeppurple-50);
+  --color-deeppurple-60: var(--deeppurple-60);
+  --color-deeppurple-70: var(--deeppurple-70);
+  --color-deeppurple-80: var(--deeppurple-80);
+  --color-deeppurple-90: var(--deeppurple-90);
+
   --color-brightpetrole: var(--brightpetrole);
+  --color-brightpetrole-10: var(--brightpetrole-10);
+  --color-brightpetrole-20: var(--brightpetrole-20);
+  --color-brightpetrole-30: var(--brightpetrole-30);
+  --color-brightpetrole-40: var(--brightpetrole-40);
+  --color-brightpetrole-50: var(--brightpetrole-50);
+  --color-brightpetrole-60: var(--brightpetrole-60);
+  --color-brightpetrole-70: var(--brightpetrole-70);
+  --color-brightpetrole-80: var(--brightpetrole-80);
+  --color-brightpetrole-90: var(--brightpetrole-90);
+
   --color-grey: var(--grey);
+  --color-gray-100: var(--black-10);
+  --color-gray-200: var(--black-20);
+  --color-gray-300: var(--black-30);
+  --color-gray-400: var(--black-40);
+  --color-gray-500: var(--black-50);
+  --color-gray-600: var(--black-60);
+  --color-gray-700: var(--black-70);
+  --color-gray-800: var(--black-80);
+  --color-gray-900: var(--black-90);
+  --font-cronos: "CronosPro";
 }
 
 body, html {

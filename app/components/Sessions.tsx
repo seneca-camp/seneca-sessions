@@ -4,7 +4,6 @@ import styles from '../css/index.module.css';
 import { rooms } from '~/models/rooms';
 import { Session } from '@prisma/client';
 import { usePersistedState } from '~/hooks/persistedState';
-import { useState } from 'react';
 
 export type UserSession = Session & {
     liked: boolean;
@@ -19,8 +18,8 @@ export type SessionsViewProps = {
 type SessionView = 'table' | 'list';
 
 export function Sessions(props: { slots: Slot[], sessions: Session[] }) {
-    const [view, setView] = useState<SessionView>('table');
-    const isHydrated = useHydrated(); // oh god this is so hacky
+    const [view, setView] = usePersistedState<SessionView>('table', 'session-view');
+    const isHydrated = useHydrated();
     const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>([], "liked-session-ids");
     const isLiked = (sessionId: string) => isHydrated && likedSessionIds.includes(sessionId);
 
@@ -39,13 +38,32 @@ export function Sessions(props: { slots: Slot[], sessions: Session[] }) {
 
     return (
         <div>
-            <div className="flex flex-row gap-2 mb-4">
-                {view === 'table' && <button onClick={() => setView('list')} className="cursor-pointer">
-                    <i className="ri-table-2 text-2xl bg-white rounded-full p-1"></i>
-                </button>}
-                {view === 'list' && <button onClick={() => setView('table')} className="cursor-pointer">
-                    <i className="ri-list-check text-2xl bg-white rounded-full p-1"></i>
-                </button>}
+            <div className="flex flex-row gap-2 mb-4 justify-end">
+                <button
+                    onClick={() => setView(view === 'table' ? 'list' : 'table')}
+                    className={`
+                        cursor-pointer
+                        flex items-center justify-center
+                        w-12 h-12
+                        rounded-full
+                        shadow-md
+                        border-2
+                        transition
+                        duration-200
+                        text-brightpetrole
+                        bg-brightpetrole-500
+                        border-brightpetrole-600
+                        hover:bg-brightpetrole-600
+                        focus:outline-none
+                    `}
+                    aria-label={view === 'table' ? "Switch to list view" : "Switch to table view"}
+                >
+                    {view === 'table' ? (
+                        <i className="ri-list-check text-2xl "></i>
+                    ) : (
+                        <i className="ri-table-2 text-2xl"></i>
+                    )}
+                </button>
             </div>
             {view === 'table' && <SessionTable slots={props.slots} sessions={userSessions} toggleLikedness={toggleLikedness} />}
             {view === 'list' && <SessionList slots={props.slots} sessions={userSessions} toggleLikedness={toggleLikedness} />}
@@ -57,13 +75,13 @@ function SessionList(props: SessionsViewProps) {
     return (
         <ul className="space-y-6">
             {props.slots.map((slot) => (
-                <li key={slot.id} className="bg-white/80 rounded-lg shadow p-4">
+                <li key={slot.id} className="rounded-lg shadow p-4 bg-fancyorange-10">
                     <h2 className="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                        <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded">{slot.time}</span>
+                        <span className="inline-block bg-white px-2 py-1 rounded">{slot.time}</span>
                     </h2>
                     <div className="space-y-3">
                         {props.sessions.filter(s => s.slot === slot.id).map((session) => (
-                            <div key={session.id} className={`flex items-center justify-between p-3 rounded transition-colors border ${session.liked ? 'bg-red-100 border-red-300' : 'bg-gray-50 border-gray-200'}`}>
+                            <div key={session.id} className={`flex items-center justify-between p-3 rounded transition-colors border ${session.liked ? 'bg-deeppurple-20 border-deeppurple-50' : 'bg-gray-50 border-gray-200'}`}>
                                 <div>
                                     <p className="font-medium text-gray-900">{session.title}</p>
                                     <p className="text-sm text-gray-500">{session.room}</p>
@@ -74,7 +92,7 @@ function SessionList(props: SessionsViewProps) {
                                     </a>
                                     <button
                                         onClick={() => props.toggleLikedness(session.id)}
-                                        className={`text-2xl focus:outline-none transition-colors ${session.liked ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}`}
+                                        className={`text-2xl cursor-pointer focus:outline-none transition-colors ${session.liked ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}`}
                                         title={session.liked ? "Unlike" : "Like"}
                                     >
                                         <i className={session.liked ? "ri-heart-fill" : "ri-heart-line"}></i>
@@ -114,15 +132,15 @@ function SessionTable(props: SessionsViewProps) {
                             }
                             return <td
                                 className={`${styles.sessionName} ${styles.hasContent} ${session.liked ? styles.likedSession : ""}`}
-                                key={session.id}
-                                data-sessionid={session.id}
-                            >
+                                    key={session.id}
+                                    data-sessionid={session.id}
+                                >
                                 <div onClick={() => props.toggleLikedness(session.id)}>
                                     <p>{session.title}</p>
-                                </div>
+                                    </div>
                                 <hr />
                                 <a href={session.note} target="_blank"><div className={`text-center`}>Session Notes - 📝</div></a>
-                            </td>
+                                </td>
                         })}
                     </tr>
                 ))}

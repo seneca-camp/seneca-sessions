@@ -36,11 +36,14 @@ export default function IndexRoute() {
         <main className={styles.sessionsTableWrapper}>
             {!chosenSchedule && <h1 className="text-white text-center my-8">No sessions :'(</h1>}
             {chosenSchedule && <>
-                <div className="flex flex-row justify-center items-center gap-2">
-                    {schedules.map((schedule) => (
-                        <button className={styles.scheduleTitle} key={schedule.id} onClick={() => setChosenSchedule(schedule)}>
+                <div className="flex flex-row justify-center content-center items-center gap-2">
+                    {schedules.map((schedule, i) => (
+                        <>
+                        <button className="text-brightpetrole text-2xl font-cronos" key={schedule.id} onClick={() => setChosenSchedule(schedule)}>
                             {schedule.name}
                         </button>
+                        {i !== schedules.length - 1 && <span>-</span>}
+                        </>
                     ))}
                 </div>
                 <Sessions slots={getSlots(chosenSchedule)} sessions={sessions} />
