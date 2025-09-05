@@ -1,17 +1,15 @@
+import { Schedule } from "@prisma/client";
+
 export type Slot = {
     id: number,
     time: string,
 }
 
-export type Day = 'SATURDAY' | 'SUNDAY';
-
-export function getDay(): Day {
-    const day = new Date().getDay();
-    // Show saturday slots on every day except sunday
-    if (day === 0) {
-        return 'SUNDAY';
+export function getSlots(schedule: Schedule): Slot[] {
+    if (schedule.date.getDay() === 0) {
+        return sundaySlots;
     }
-    return 'SATURDAY';
+    return saturdaySlots;
 }
 
 export const saturdaySlots: Slot[] = [
@@ -29,8 +27,3 @@ export const sundaySlots: Slot[] = [
     {id: 1, time: "11:00 - 11:45"},
     {id: 2, time: "12:00 - 12:45"},
 ]
-
-export const slots = {
-    'SATURDAY': saturdaySlots,
-    'SUNDAY': sundaySlots,
-}
