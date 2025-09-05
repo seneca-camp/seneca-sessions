@@ -1,5 +1,4 @@
 import type { LinksFunction } from 'react-router';
-import logo from './assets/logo.png';
 import '~/css/tailwind.css';
 import 'remixicon/fonts/remixicon.css'
 
@@ -10,10 +9,6 @@ import styles from '~/css/root.module.css';
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "https://fonts.cdnfonts.com/css/cronospro" }
 ];
-
-export function Logo() {
-  return <img src={logo} width="200px" alt="Seneca Logo" />;
-}
 
 export default function App() {
   const year = new Date().getFullYear();
@@ -30,10 +25,6 @@ export default function App() {
         <title>Seneca Sessions</title>
       </head>
       <body className="p-4">
-        <header style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-          <Logo />
-          <nav><a href="/" className={styles.headline}>Sessions</a> | <a href="/rooms" className={styles.headline}>Raumplan</a></nav>
-        </header>
         <Outlet />
         <p className="text-white text-center">#seneca{year} <a href="https://seneca.camp/impressum/">Impressum</a></p>
         <Scripts />

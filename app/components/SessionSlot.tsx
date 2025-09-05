@@ -1,7 +1,6 @@
 import { Session } from "@prisma/client";
 import { useState } from "react";
 import { useSubmit } from "react-router";
-import style from "~/css/admin.index.module.css";
 import { DragDropCell } from "./DragDropCell";
 import { DeleteForm } from "./DeleteForm";
 
