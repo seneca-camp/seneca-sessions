@@ -1,9 +1,9 @@
 import { db } from "~/utils/db.server";
-import { ActionFunctionArgs, LoaderFunctionArgs, redirect, useLoaderData } from "react-router";
+import { ActionFunctionArgs, redirect, useLoaderData } from "react-router";
 import { createSchedule, deleteSchedule, toggleVisibility } from "~/models/schedule";
 import { DeleteForm } from "~/components/DeleteForm";
 
-export const loader = async (_args: LoaderFunctionArgs) => {
+export const loader = async () => {
   const schedules = await db.schedule.findMany({ orderBy: { date: "asc" } });
   return schedules;
 };

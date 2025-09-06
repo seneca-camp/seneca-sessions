@@ -37,13 +37,13 @@ export const DragDropCell = React.forwardRef<HTMLTableCellElement, DragDropCellP
         props.onDragStart(event);
     }
 
-    const { children, onDrop, id, ...rest } = props;
+    const { children, onDragStart, onDrop, id, ...rest } = props;
 
     return (
         <td
             id={id}
             onDrop={animateOnDrop}
-            draggable={props.onDragStart !== undefined}
+            draggable={onDragStart !== undefined}
             onDragOver={addDropEffect}
             onDragStart={animateOnDragStart}
             onDragEnter={addHoverEffect}
@@ -52,7 +52,7 @@ export const DragDropCell = React.forwardRef<HTMLTableCellElement, DragDropCellP
             ref={ref}
             {...rest}
         >
-            {props.children}
+            {children}
         </td>
     );
 });
