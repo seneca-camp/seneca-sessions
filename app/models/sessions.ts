@@ -26,14 +26,14 @@ export async function createSession(form: FormData) {
 
     let message = null;
 
-    if (!await saveSession(session)) {
+    if (!await saveSession(session, scheduleId)) {
         message = `Entry at Room ${room}, Slot #${slot} already exists`;
     }
     return { message: message, title, slot, room };
 }
 
-async function saveSession(session: Prisma.SessionCreateInput): Promise<boolean> {
-    const exists = await db.session.count({ where: { slot: session.slot, room: session.room } })
+async function saveSession(session: Prisma.SessionCreateInput, scheduleId: string): Promise<boolean> {
+    const exists = await db.session.count({ where: { slot: session.slot, room: session.room, scheduleId } })
     if (exists) {
         return false
     }
