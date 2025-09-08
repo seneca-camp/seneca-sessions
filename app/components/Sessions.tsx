@@ -33,8 +33,8 @@ export function Sessions(props: { slots: Slot[], sessions: Session[] }) {
     }
 
     const userSessions = props.sessions.map((session) => ({
-        ...session,
-        liked: isLiked(session.id)
+            ...session,
+            liked: isLiked(session.id)
     }));
 
     return (
