@@ -74,8 +74,8 @@ function SessionList(props: SessionsViewProps) {
                         {props.sessions.filter(s => s.slot === slot.id).map((session) => (
                             <div key={session.id} className={`flex items-center justify-between p-3 rounded border border-2 transition-colors ${session.liked ? 'bg-deeppurple-20 border-deeppurple-40 hover:bg-deeppurple-20' : 'bg-fancyorange-10 border-fancyorange-40 hover:bg-fancyorange-20'}`} >
                                 <div>
-                                    <p className="font-medium text-gray-90">{session.title}</p>
-                                    <p className={`text-gray-60 text-sm`}>{session.room}</p>
+                                    <p className="font-bold text-gray-90">{session.title}</p>
+                                    <p className={`text-gray-80 text-sm`}>{session.room}</p>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {session.note && (
