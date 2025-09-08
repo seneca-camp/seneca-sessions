@@ -44,8 +44,8 @@ export function SessionTable(props: SessionsViewProps) {
 
 export function Note({ href }: { href: string }) {
     return (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="text-gray-60 hover:text-gray-80 p-2" title="Open session notes">
-            Session Notes <i className="ri-file-text-line text-lg"></i>
+        <a href={href} target="_blank" rel="noopener noreferrer" className="text-gray-60 hover:text-gray-80" title="Open session notes">
+            <i className="ri-file-text-line text-lg"></i> Notes 
         </a>
     );
 }

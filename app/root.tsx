@@ -22,7 +22,7 @@ export default function App() {
         <Scripts />
         <title>Seneca Sessions</title>
       </head>
-      <body className="p-4">
+      <body className="p-4 overflow-y-scroll">
         <Outlet />
         <p className="text-white text-center mt-4">#seneca{year} <a href="https://seneca.camp/impressum/">Impressum</a></p>
         <Scripts />

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLoaderData, useRevalidator } from 'react-router';
 
-import styles from '../css/index.module.css';
 import { useInterval } from '~/utils/interval-hook';
 import { getPublicSchedules, PublicSchedule } from '~/models/schedule';
 import { getSlots } from '~/models/slots';
@@ -28,7 +27,7 @@ export default function IndexRoute() {
     const [chosenSchedule, setChosenSchedule] = useState<PublicSchedule>(schedules[schedules.length - 1]);
 
     return (
-        <main className={styles.sessionsTableWrapper}>
+        <main className="overflow-x-auto">
             {!chosenSchedule && <h1 className="text-white text-center my-8">No sessions :'(</h1>}
             {chosenSchedule && <>
                 <div className="flex flex-row justify-center content-center items-center gap-2 mb-4">
