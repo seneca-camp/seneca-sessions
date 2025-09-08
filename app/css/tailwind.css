@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 :root {
-    --black: #231f20;
-    --grey: #231f20;
-
+    --black: #121212;
+    --gray: #231f20;
+    --brightpetrole: #00abc8;
     --fancyorange: #f35c19;
+
     --fancyorange-90: #f46a26;
     --fancyorange-80: #f57836;
     --fancyorange-70: #f68748;
@@ -15,7 +16,6 @@
     --fancyorange-20: #fddac0;
     --fancyorange-10: #feeddf;
 
-    --deeppurple: #ba0946;
     --deeppurple-90: #c11c50;
     --deeppurple-80: #c72f5c;
     --deeppurple-70: #ce456a;
@@ -26,7 +26,6 @@
     --deeppurple-20: #f1c3cb;
     --deeppurple-10: #f8e0e4;
 
-    --brightpetrole: #00abc8;
     --brightpetrole-90: #19b4cb;
     --brightpetrole-80: #33bccf;
     --brightpetrole-70: #4cc4d3;
@@ -37,18 +36,20 @@
     --brightpetrole-20: #cceef0;
     --brightpetrole-10: #e6f7f8;
 
-    --black-90: #393536;
-    --black-80: #4f4c4c;
-    --black-70: #656263;
-    --black-60: #7b7979;
-    --black-50: #918f90;
-    --black-40: #a7a6a6;
-    --black-30: #bdbcbc;
-    --black-20: #d3d3d3;
-    --black-10: #e9e9e9;
+    --gray-90: #393536;
+    --gray-80: #4f4c4c;
+    --gray-70: #656263;
+    --gray-60: #7b7979;
+    --gray-50: #918f90;
+    --gray-40: #a7a6a6;
+    --gray-30: #bdbcbc;
+    --gray-20: #d3d3d3;
+    --gray-10: #e9e9e9;
 }
 
 @theme {
+  --font-cronos: "CronosPro";
+
   --color-fancyorange: var(--fancyorange);
   --color-fancyorange-10: var(--fancyorange-10);
   --color-fancyorange-20: var(--fancyorange-20);
@@ -82,19 +83,18 @@
   --color-brightpetrole-80: var(--brightpetrole-80);
   --color-brightpetrole-90: var(--brightpetrole-90);
 
-  --color-grey: var(--grey);
-  --color-gray-100: var(--black-10);
-  --color-gray-200: var(--black-20);
-  --color-gray-300: var(--black-30);
-  --color-gray-400: var(--black-40);
-  --color-gray-500: var(--black-50);
-  --color-gray-600: var(--black-60);
-  --color-gray-700: var(--black-70);
-  --color-gray-800: var(--black-80);
-  --color-gray-900: var(--black-90);
-  --font-cronos: "CronosPro";
+  --color-gray: var(--gray);
+  --color-gray-10: var(--gray-10);
+  --color-gray-20: var(--gray-20);
+  --color-gray-30: var(--gray-30);
+  --color-gray-40: var(--gray-40);
+  --color-gray-50: var(--gray-50);
+  --color-gray-60: var(--gray-60);
+  --color-gray-70: var(--gray-70);
+  --color-gray-80: var(--gray-80);
+  --color-gray-90: var(--gray-90);
 }
 
 body, html {
-    background-color: var(--black-90);
+    background-color: var(--black);
 }
