@@ -1,50 +1,9 @@
-.card {
-	border-radius: 0.5rem;
-	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3);
-	border: 1px solid var(--color-gray-800);
-	background-color: var(--color-gray-900);
-}
-
-.cardLight {
-	border-radius: 0.5rem;
-	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
-	border: 1px solid var(--color-gray-200);
-	background-color: #ffffff;
-}
-
 .sectionHeader {
 	color: var(--color-gray-100);
 	font-weight: 600;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	font-size: 0.875rem;
-}
-
-.badge {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.25rem;
-	border-radius: 9999px;
-	padding: 0.125rem 0.5rem;
-	font-size: 0.75rem;
-	line-height: 1rem;
-	font-weight: 500;
-}
-
-.badgeBrand {
-	background-color: var(--color-brightpetrole-10);
-	color: var(--color-brightpetrole);
-	border: 1px solid var(--color-brightpetrole-30);
-}
-
-.badgeAccent {
-	background-color: var(--color-fancyorange-10);
-	color: var(--color-fancyorange);
-	border: 1px solid var(--color-fancyorange-30);
-}
-
-.muted {
-	color: var(--color-gray-400);
 }
 
 .clickable {
