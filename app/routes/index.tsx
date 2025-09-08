@@ -35,7 +35,7 @@ export default function IndexRoute() {
                     {schedules.map((schedule, i) => (
                         <Button
                             variant={chosenSchedule.id === schedule.id ? 'solid' : 'outline'}
-                            tone="primary"
+                            color="primary"
                             size="md"
                             onClick={() => setChosenSchedule(schedule)}
                             className="font-cronos"
