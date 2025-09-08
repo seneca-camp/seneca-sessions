@@ -1,12 +1,12 @@
 import React from "react";
 
 type ButtonVariant = "solid" | "outline" | "ghost";
-type ButtonTone = "primary" | "accent" | "neutral" | "danger";
+type ButtonColor = "primary" | "accent" | "neutral" | "danger";
 type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: ButtonVariant;
-	tone?: ButtonTone;
+	color?: ButtonColor;
 	size?: ButtonSize;
 	fullWidth?: boolean;
 };
@@ -15,30 +15,30 @@ function classNames(classes: Array<string | false | null | undefined>) {
 	return classes.filter(Boolean).join(" ");
 }
 
-function toneClasses(tone: ButtonTone, variant: ButtonVariant) {
+function colorClasses(color: ButtonColor, variant: ButtonVariant) {
 	switch (variant) {
 		case "solid":
 			return {
 				primary:
-					"bg-brightpetrole text-white hover:bg-brightpetrole-90 focus-visible:ring-brightpetrole-90",
+					"bg-brightpetrole text-gray hover:bg-brightpetrole-90 focus-visible:ring-brightpetrole-90",
 				accent:
 					"bg-fancyorange text-white hover:bg-fancyorange-90 focus-visible:ring-fancyorange-90",
 				neutral:
 					"bg-gray-800 text-white hover:bg-gray-700 focus-visible:ring-gray-600",
 				danger:
 					"bg-deeppurple text-white hover:bg-deeppurple-90 focus-visible:ring-deeppurple-90",
-			}[tone];
+			}[color];
 		case "outline":
 			return {
 				primary:
-					"border border-brightpetrole text-brightpetrole hover:bg-brightpetrole-10",
+					"border-2 border-brightpetrole text-brightpetrole hover:bg-brightpetrole-50 hover:text-gray-90",
 				accent:
 					"border border-fancyorange text-fancyorange hover:bg-fancyorange-10",
 				neutral:
 					"border border-gray-400 text-gray-200 hover:bg-gray-800",
 				danger:
 					"border border-deeppurple text-deeppurple hover:bg-deeppurple-10",
-			}[tone];
+			}[color];
 		case "ghost":
 		default:
 			return {
@@ -46,7 +46,7 @@ function toneClasses(tone: ButtonTone, variant: ButtonVariant) {
 				accent: "text-fancyorange hover:bg-fancyorange-10",
 				neutral: "text-gray-200 hover:bg-gray-800",
 				danger: "text-deeppurple hover:bg-deeppurple-10",
-			}[tone];
+			}[color];
 	}
 }
 
@@ -55,7 +55,7 @@ function sizeClasses(size: ButtonSize) {
 		case "sm":
 			return "h-8 px-3 text-sm";
 		case "md":
-			return "h-10 px-4";
+			return "h-10 px-4 text-xl";
 		case "lg":
 			return "h-12 px-6 text-lg";
 		case "icon":
@@ -66,7 +66,7 @@ function sizeClasses(size: ButtonSize) {
 
 export function Button({
 	variant = "solid",
-	tone = "primary",
+	color = "primary",
 	size = "md",
 	fullWidth,
 	className,
@@ -79,7 +79,7 @@ export function Button({
 				classNames([
 					"rounded-md cursor-pointer transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2",
 					sizeClasses(size),
-					toneClasses(tone, variant),
+					colorClasses(color, variant),
 					fullWidth ? "w-full" : undefined,
 					className,
 				])
