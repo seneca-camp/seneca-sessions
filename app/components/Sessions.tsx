@@ -6,6 +6,7 @@ import { rooms } from '~/models/rooms';
 import { Session } from '@prisma/client';
 import { usePersistedState } from '~/hooks/persistedState';
 import Button from '~/components/ui/Button';
+import { Badge } from './ui/Badge';
 
 export type UserSession = Session & {
     liked: boolean;
@@ -44,7 +45,7 @@ export function Sessions(props: { slots: Slot[], sessions: Session[] }) {
                 <Button
                     size="icon"
                     variant="outline"
-                    tone="primary"
+                    color="primary"
                     aria-label={view === 'table' ? "Switch to list view" : "Switch to table view"}
                     onClick={() => setView(view === 'table' ? 'list' : 'table')}
                 >
@@ -65,39 +66,37 @@ function SessionList(props: SessionsViewProps) {
     return (
         <ul className="space-y-6">
             {props.slots.map((slot) => (
-                <li key={slot.id} className={`${ui.cardLight} p-4`}>
-                    <div className="flex items-center justify-between mb-3">
-                        <h2 className="flex items-center gap-3">
-                            <span className={`${ui.badge} ${ui.badgeBrand}`}>{slot.time}</span>
-                        </h2>
+                <li key={slot.id} className="bg-gray-90 rounded-lg p-4">
+                    <div className="flex flex-row justify-center mb-3">
+                        <Badge>{slot.time}</Badge>
                     </div>
                     <div className="space-y-3">
                         {props.sessions.filter(s => s.slot === slot.id).map((session) => (
-                            <div key={session.id} className={`flex items-center justify-between p-3 rounded border transition-colors ${session.liked ? 'bg-deeppurple-10 border-deeppurple-40' : 'bg-fancyorange-10 border-fancyorange-40 hover:bg-fancyorange-20'}`} >
+                            <div key={session.id} className={`flex items-center justify-between p-3 rounded border border-2 transition-colors ${session.liked ? 'bg-deeppurple-20 border-deeppurple-40 hover:bg-deeppurple-20' : 'bg-fancyorange-10 border-fancyorange-40 hover:bg-fancyorange-20'}`} >
                                 <div>
-                                    <p className="font-medium text-gray-900">{session.title}</p>
-                                    <p className={`text-gray-600 text-sm`}>{session.room}</p>
+                                    <p className="font-medium text-gray-90">{session.title}</p>
+                                    <p className={`text-gray-60 text-sm`}>{session.room}</p>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {session.note && (
-                                        <a href={session.note} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 p-2" title="Open session notes">
+                                        <a href={session.note} target="_blank" rel="noopener noreferrer" className="text-gray-60 hover:text-gray-80 p-2" title="Open session notes">
                                             <i className="ri-file-text-line text-lg"></i>
                                         </a>
                                     )}
                                     <Button
                                         size="icon"
                                         variant="ghost"
-                                        tone={session.liked ? 'danger' : 'accent'}
+                                        color="accent"
                                         aria-label={session.liked ? 'Unlike' : 'Like'}
                                         onClick={() => props.toggleLikedness(session.id)}
                                     >
-                                        <i className={session.liked ? 'ri-heart-fill text-xl' : 'ri-heart-line text-xl'}></i>
+                                        <i className={session.liked ? 'ri-heart-fill text-2xl' : 'ri-heart-line text-2xl'}></i>
                                     </Button>
                                 </div>
                             </div>
                         ))}
                         {props.sessions.filter(s => s.slot === slot.id).length === 0 && (
-                            <div className={`${ui.muted} italic`}>No sessions in this slot.</div>
+                            <div className="italic text-gray-40">No sessions in this slot.</div>
                         )}
                     </div>
                 </li>
