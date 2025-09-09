@@ -9,7 +9,7 @@ export function DeleteForm({id, children}: {id: string} & React.PropsWithChildre
         <form method="post" onSubmit={confirmDelete}>
             <input type="hidden" name="id" value={id} />
             <input type="hidden" name="type" value="delete" />
-            <button type="submit" className={`rounded cursor-pointer`}>
+            <button type="submit" className={`rounded cursor-pointer`} aria-label="Delete">
                 {children}
             </button>
         </form>
