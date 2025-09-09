@@ -105,6 +105,7 @@ export default function ScheduleRoute() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function AddSessionForm({ schedule, actionData, slots }: { schedule: Schedule, actionData: any, slots: Slot[] }) {
   return (
     <form

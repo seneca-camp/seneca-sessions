@@ -34,7 +34,7 @@ export default function IndexRoute() {
             {!chosenSchedule && <h1 className="text-white text-center my-8">No sessions :'(</h1>}
             {chosenSchedule && <>
                 <div className="flex flex-row justify-center content-center items-center gap-2 mb-4">
-                    {schedules.map((schedule, i) => (
+                    {schedules.map((schedule) => (
                         <Button
                             variant={chosenSchedule.id === schedule.id ? 'solid' : 'outline'}
                             color="primary"
