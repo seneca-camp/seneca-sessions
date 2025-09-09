@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Session, useLoaderData, useRevalidator, useSearchParams } from 'react-router';
+import { useLoaderData, useRevalidator, useSearchParams } from 'react-router';
 
 import { useInterval } from '~/utils/interval-hook';
 import { getPublicSchedules, PublicSchedule } from '~/models/schedule';
