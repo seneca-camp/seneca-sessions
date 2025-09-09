@@ -48,7 +48,6 @@ export const DragDropCell = React.forwardRef<HTMLTableCellElement, DragDropCellP
             onDragStart={animateOnDragStart}
             onDragEnter={addHoverEffect}
             onDragLeave={removeHoverEffect}
-            className={style.slotCell}
             ref={ref}
             {...rest}
         >

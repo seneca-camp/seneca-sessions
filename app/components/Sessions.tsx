@@ -5,6 +5,8 @@ import { usePersistedState } from '~/hooks/persistedState';
 import Button from '~/components/ui/Button';
 import { SessionTable } from './SessionTable';
 import { SessionList } from './SessionList';
+import { useSearchParams } from 'react-router';
+import { useState } from 'react';
 
 export type UserSession = Session & {
     liked: boolean;
@@ -19,7 +21,8 @@ export type SessionsViewProps = {
 type SessionView = 'table' | 'list';
 
 export function Sessions(props: { slots: Slot[], sessions: Session[] }) {
-    const [view, setView] = usePersistedState<SessionView>('table', 'session-view');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [view, setView] = useState<SessionView>(searchParams.get('view') as SessionView || 'table');
     const isHydrated = useHydrated();
     const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>([], "liked-session-ids");
     const isLiked = (sessionId: string) => isHydrated && likedSessionIds.includes(sessionId);
@@ -33,8 +36,8 @@ export function Sessions(props: { slots: Slot[], sessions: Session[] }) {
     }
 
     const userSessions = props.sessions.map((session) => ({
-        ...session,
-        liked: isLiked(session.id)
+            ...session,
+            liked: isLiked(session.id)
     }));
 
     return (
@@ -45,7 +48,13 @@ export function Sessions(props: { slots: Slot[], sessions: Session[] }) {
                     variant="outline"
                     color="primary"
                     aria-label={view === 'table' ? "Switch to list view" : "Switch to table view"}
-                    onClick={() => setView(view === 'table' ? 'list' : 'table')}
+                    onClick={() => {
+                        const newView = view === 'table' ? 'list' : 'table';
+                        setView(newView);
+                        const newSearchParams = new URLSearchParams(searchParams);
+                        newSearchParams.set('view', newView);
+                        setSearchParams(newSearchParams);
+                    }}
                 >
                     {view === 'table' ? (
                         <i className="ri-list-check text-xl"></i>

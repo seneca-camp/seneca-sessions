@@ -20,6 +20,7 @@ export function EmptySessionSlot(props: { slotId: number, room: string }) {
 
     return (
         <DragDropCell
+            className="bg-gray-80 rounded-md"
             id={`slot-${props.slotId}-room-${props.room}`}
             data-slot={props.slotId}
             data-room={props.room}

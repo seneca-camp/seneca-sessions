@@ -18,8 +18,10 @@ import {
 } from "react-router";
 import { SessionSlot } from "~/components/SessionSlot";
 import { EmptySessionSlot } from "~/components/EmptySessionSlot";
-import { getSlots } from "~/models/slots";
+import { getSlots, Slot } from "~/models/slots";
 import { getSchedule } from "~/models/schedule";
+import { Schedule } from "@prisma/client";
+import { Button } from "~/components/ui/Button";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
@@ -68,96 +70,27 @@ export default function ScheduleRoute() {
   }
 
   return (
-    <div>
+    <div className="p-4">
       <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">
-        Edit Mode
+        Add Session
       </h1>
-      <div>
-        {actionData ? (
-          <p className="text-deeppurple">{actionData.message}</p>
-        ) : (
-          ""
-        )}
-        <form
-          className="max-w-md bg-white shadow-md rounded px-8 pt-12 pb-8 mb-4"
-          method="post"
-          action={`/admin/schedule/${schedule.id}`}
-        >
-          <input type="hidden" name="scheduleId" value={schedule.id} />
-          <div>
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Title:{" "}
-              <input
-                type="text"
-                name="title"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                defaultValue={actionData?.message ? actionData.title : ""}
-              />
-            </label>
-          </div>
-          <div>
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Slot:
-              <select
-                name="slot"
-                defaultValue={actionData?.message ? actionData.slot : ""}
-              >
-                {slots.map((slot) => (
-                  <option key={slot.id} value={slot.id}>
-                    {slot.time}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div>
-            <label className="block text-gray-700 text-md font-bold mb-2">
-              Room:{" "}
-              <select
-                id="room"
-                name="room"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                defaultValue={actionData?.message ? actionData.room : ""}
-              >
-                {rooms.map((room) => (
-                  <option key={"r" + room} value={room}>
-                    {room}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <input type="hidden" name="type" value="create" />
-          <div>
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Add
-            </button>
-          </div>
-        </form>
-      </div>
+      <AddSessionForm schedule={schedule} actionData={actionData} slots={slots} />
       <div className="overflow-x">
-        <table className="w-full text-base text-center text-black table-auto border overflow-scroll">
-          <thead className="text-lg text-white uppercase bg-fancyorange">
-            <tr key="table-head" className="divide-x">
-              <th key="head-1"></th>
+        <table className="border-separate border-spacing-2 w-full">
+          <thead className="text-lg text-white uppercase">
+            <tr key="table-head" className="min-width-fit">
+              <th className="text-left" key="head-1" ></th>
               {rooms.map((room) => (
-                <th key={room}>{room}</th>
+                <th className="text-white p-2" key={room}>{room}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="[&>*:nth-child(odd)]:bg-brightpetrole  [&>*:nth-child(even)]:bg-white">
+          <tbody>
             {slots.map(({ id: slotId, time }) => (
-              <tr className="min-h-100 divide-x" key={"row-" + slotId}>
-                <td className="text-lg font-bold" key={slotId}>
-                  {time}
-                </td>
+              <tr className="min-h-100 min-width-fit px-4" key={"row" + slotId}>
+                <th className="text-xl text-white text-left p-4">{time}</th>
                 {rooms.map((room, roomIndex) => {
-                  const session = sessions.filter(
-                    (s) => s.room === room && s.slot === slotId,
-                  )[0];
+                  const session = sessions.filter(s => s.room === room && s.slot === slotId)[0];
                   if (!session) {
                     return <EmptySessionSlot key={`slot-${slotId}-room-${roomIndex}`} slotId={slotId} room={room} />;
                   }
@@ -170,4 +103,66 @@ export default function ScheduleRoute() {
       </div>
     </div>
   );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function AddSessionForm({ schedule, actionData, slots }: { schedule: Schedule, actionData: any, slots: Slot[] }) {
+  return (
+    <form
+      className="max-w-lg bg-gray-90 font-bold text-white text-md shadow-md rounded-lg px-8 pt-12 pb-8 mb-4"
+      method="post"
+      action={`/admin/schedule/${schedule.id}`}
+    >
+      <input type="hidden" name="scheduleId" value={schedule.id} />
+      <div>
+        <label className="block font-bold mb-2">
+          Title:{" "}
+          <input
+            required
+            type="text"
+            name="title"
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            defaultValue={actionData?.message ? actionData.title : ""}
+          />
+        </label>
+      </div>
+      <div>
+        <label className="block bold mb-2">
+          Slot:
+          <select
+            name="slot"
+            defaultValue={actionData?.message ? actionData.slot : ""}
+          >
+            {slots.map((slot) => (
+              <option key={slot.id} value={slot.id}>
+                {slot.time}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <div>
+        <label className="block mb-2">
+          Room:{" "}
+          <select
+            id="room"
+            name="room"
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            defaultValue={actionData?.message ? actionData.room : ""}
+          >
+            {rooms.map((room) => (
+              <option key={"r" + room} value={room}>
+                {room}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <div className="h-8">
+        {actionData?.message && <p className="text-deeppurple p-2 rounded-md bg-deeppurple-10 border-1 border-deeppurple">{actionData.message}</p>}
+      </div>
+      <input type="hidden" name="type" value="create" />
+      <Button className="mt-4" variant="solid" color="primary" type="submit">Add</Button>
+    </form>
+  )
 }

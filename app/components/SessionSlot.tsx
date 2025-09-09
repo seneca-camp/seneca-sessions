@@ -28,18 +28,19 @@ export function SessionSlot({ session }: SessionSlotProps) {
   return (
     <DragDropCell
       id={session.id}
+      className="bg-fancyorange-10 rounded-md cursor-grab relative"
       key={session.id}
       onDrop={onSessionSwitch}
       onDragStart={onSessionDragStart}
     >
-      <div className="flex p-2 flex-row items-center gap-2">
+      <div className="flex p-2 flex-row items-center justify-center gap-2 relative">
         <EditForm session={session} />
-        <DeleteForm id={session.id}>
-          <Button size="icon" variant="ghost" color="danger" aria-label="Delete session">
-            <i className="ri-delete-bin-line text-xl"></i>
-          </Button>
-        </DeleteForm>
       </div>
+      <DeleteForm id={session.id}>
+        <Button size="icon" variant="ghost" color="danger" aria-label="Delete session" className="absolute bottom-0 right-0">
+          <i className="ri-delete-bin-line text-xl"></i>
+        </Button>
+      </DeleteForm>
     </DragDropCell>
   );
 }
@@ -52,15 +53,15 @@ function EditForm({ session }: { session: Session }) {
       <input type="hidden" name="type" value="rename" />
       <input type="hidden" name="id" value={session.id} />
       <div className="flex flex-row items-center gap-2">
-        <input className={`${editModus ? "border-b-2 border-black" : ""}`} readOnly={!editModus} type="text" name="title" defaultValue={session.title} />
+        <input className={`w-auto ${editModus ? "border-b-2 border-black" : ""}`} readOnly={!editModus} type="text" name="title" defaultValue={session.title} />
         {!editModus && (
-          <Button size="icon" variant="ghost" color="brand" aria-label="Edit title" onClick={() => setEditModus(!editModus)}>
-            <i className="ri-pencil-line text-xl"></i>
+          <Button size="icon" variant="ghost" color="neutral" aria-label="Edit title" onClick={() => setEditModus(!editModus)}>
+            <i className="ri-pencil-line hover:text-white text-black text-xl"></i>
           </Button>
         )}
         {editModus && (
-          <Button size="icon" variant="solid" color="brand" aria-label="Save title" type="submit">
-            <i className="ri-check-line text-xl"></i>
+          <Button size="icon" variant="ghost" color="neutral" aria-label="Save title" type="submit">
+            <i className="ri-check-line hover:text-white text-black text-xl"></i>
           </Button>
         )}
       </div>

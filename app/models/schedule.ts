@@ -1,4 +1,4 @@
-import { Schedule, Session } from "@prisma/client";
+import { Schedule } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
 export async function getSchedule(scheduleId: string): Promise<Schedule> {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useLoaderData, useRevalidator } from 'react-router';
+import { useLoaderData, useRevalidator, useSearchParams } from 'react-router';
 
-import styles from '../css/index.module.css';
 import { useInterval } from '~/utils/interval-hook';
 import { getPublicSchedules, PublicSchedule } from '~/models/schedule';
 import { getSlots } from '~/models/slots';
@@ -25,19 +24,27 @@ export default function IndexRoute() {
     }
 
     const schedules = useLoaderData<typeof loader>();
-    const [chosenSchedule, setChosenSchedule] = useState<PublicSchedule>(schedules[schedules.length - 1]);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const defaultSchedule = schedules.find(schedule => schedule.id === searchParams.get('schedule')) || schedules[schedules.length - 1];
+    const [chosenSchedule, setChosenSchedule] = useState<PublicSchedule>(defaultSchedule);
 
     return (
-        <main className={styles.sessionsTableWrapper}>
+        <main className="overflow-x-auto">
             {!chosenSchedule && <h1 className="text-white text-center my-8">No sessions :'(</h1>}
             {chosenSchedule && <>
                 <div className="flex flex-row justify-center content-center items-center gap-2 mb-4">
-                    {schedules.map((schedule, i) => (
+                    {schedules.map((schedule) => (
                         <Button
                             variant={chosenSchedule.id === schedule.id ? 'solid' : 'outline'}
                             color="primary"
                             size="md"
-                            onClick={() => setChosenSchedule(schedule)}
+                            onClick={() => {
+                                setChosenSchedule(schedule);
+                                const newSearchParams = new URLSearchParams(searchParams);
+                                newSearchParams.set('schedule', schedule.id);
+                                setSearchParams(newSearchParams);
+                            }}
                             className="font-cronos"
                         >
                             {schedule.name}
@@ -49,5 +56,3 @@ export default function IndexRoute() {
         </main>
     );
 }
-
-
