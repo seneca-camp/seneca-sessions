@@ -1,20 +1,15 @@
 import { useEffect, useState } from 'react';
-
-import { db } from '~/utils/db.server';
-import { rooms } from '~/models/rooms';
 import { useLoaderData, useRevalidator } from 'react-router';
 
 import styles from '../css/index.module.css';
 import { useInterval } from '~/utils/interval-hook';
-import { SessionTable } from '~/components/SessionTable';
-import { getPublicSchedules } from '~/models/schedule';
-import { Schedule } from '@prisma/client';
+import { getPublicSchedules, PublicSchedule } from '~/models/schedule';
 import { getSlots } from '~/models/slots';
+import { Sessions } from '~/components/Sessions';
+import Button from '~/components/ui/Button';
 
 export const loader = async () => {
-    const sessions = await db.session.findMany();
-    const schedules = await getPublicSchedules();
-    return { sessions, schedules };
+    return await getPublicSchedules();
 };
 
 export default function IndexRoute() {
@@ -29,33 +24,27 @@ export default function IndexRoute() {
         useInterval(revalidator.revalidate, shouldRevalidate ? 5000 : null);
     }
 
-    const { sessions, schedules } = useLoaderData<typeof loader>();
-    const [chosenSchedule, setChosenSchedule] = useState<Schedule>(schedules[schedules.length - 1]);
+    const schedules = useLoaderData<typeof loader>();
+    const [chosenSchedule, setChosenSchedule] = useState<PublicSchedule>(schedules[schedules.length - 1]);
 
     return (
         <main className={styles.sessionsTableWrapper}>
             {!chosenSchedule && <h1 className="text-white text-center my-8">No sessions :'(</h1>}
             {chosenSchedule && <>
-                <div className="flex flex-row justify-center items-center gap-2">
-                    {schedules.map((schedule) => (
-                        <button className={styles.scheduleTitle} key={schedule.id} onClick={() => setChosenSchedule(schedule)}>
+                <div className="flex flex-row justify-center content-center items-center gap-2 mb-4">
+                    {schedules.map((schedule, i) => (
+                        <Button
+                            variant={chosenSchedule.id === schedule.id ? 'solid' : 'outline'}
+                            color="primary"
+                            size="md"
+                            onClick={() => setChosenSchedule(schedule)}
+                            className="font-cronos"
+                        >
                             {schedule.name}
-                        </button>
+                        </Button>
                     ))}
                 </div>
-                <table className={styles.sessionTable}>
-                    <thead className="text-lg text-white uppercase">
-                        <tr key="table-head" className="min-width-fit">
-                            <th className={styles.roomName} key="head-1" ></th>
-                            {rooms.map((room) => (
-                                <th className={styles.roomName} key={room}>{room}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <SessionTable slots={getSlots(chosenSchedule)} sessions={sessions} />
-                    </tbody>
-                </table>
+                <Sessions slots={getSlots(chosenSchedule)} sessions={chosenSchedule.sessions} />
             </>}
         </main>
     );

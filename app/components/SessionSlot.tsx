@@ -2,6 +2,7 @@ import { Session } from "@prisma/client";
 import { useState } from "react";
 import { useSubmit } from "react-router";
 import { DragDropCell } from "./DragDropCell";
+import Button from "~/components/ui/Button";
 import { DeleteForm } from "./DeleteForm";
 
 export type SessionSlotProps = {
@@ -34,7 +35,9 @@ export function SessionSlot({ session }: SessionSlotProps) {
       <div className="flex p-2 flex-row items-center gap-2">
         <EditForm session={session} />
         <DeleteForm id={session.id}>
-          <i className="ri-delete-bin-line text-2xl"></i>
+          <Button size="icon" variant="ghost" color="danger" aria-label="Delete session">
+            <i className="ri-delete-bin-line text-xl"></i>
+          </Button>
         </DeleteForm>
       </div>
     </DragDropCell>
@@ -50,10 +53,16 @@ function EditForm({ session }: { session: Session }) {
       <input type="hidden" name="id" value={session.id} />
       <div className="flex flex-row items-center gap-2">
         <input className={`${editModus ? "border-b-2 border-black" : ""}`} readOnly={!editModus} type="text" name="title" defaultValue={session.title} />
-        {!editModus && <i onClick={() => setEditModus(!editModus)} className="ri-pencil-line cursor-pointer text-2xl"></i>}
-        {editModus && <button type="submit">
-          <i className="ri-check-line cursor-pointer text-2xl"></i>
-        </button>}
+        {!editModus && (
+          <Button size="icon" variant="ghost" color="brand" aria-label="Edit title" onClick={() => setEditModus(!editModus)}>
+            <i className="ri-pencil-line text-xl"></i>
+          </Button>
+        )}
+        {editModus && (
+          <Button size="icon" variant="solid" color="brand" aria-label="Save title" type="submit">
+            <i className="ri-check-line text-xl"></i>
+          </Button>
+        )}
       </div>
     </form>
   );

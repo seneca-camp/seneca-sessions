@@ -24,7 +24,7 @@ export default function App() {
       </head>
       <body className="p-4">
         <Outlet />
-        <p className="text-white text-center">#seneca{year} <a href="https://seneca.camp/impressum/">Impressum</a></p>
+        <p className="text-white text-center mt-4">#seneca{year} <a href="https://seneca.camp/impressum/">Impressum</a></p>
         <Scripts />
       </body>
     </html>
