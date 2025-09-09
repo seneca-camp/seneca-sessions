@@ -43,7 +43,7 @@ export default function IndexRoute() {
         <>
             {!chosenSchedule && <h1 className="text-white text-center my-8">No sessions :'(</h1>}
             {chosenSchedule && <>
-                <div className="sticky top-0 z-20 mx-auto flex flex-row justify-center content-center bg-gray items-center gap-2 py-2">
+                <div className="sticky top-0 z-20 mx-auto flex flex-row md:justify-center justify-between content-center bg-gray items-center gap-2 py-6">
                     <Button
                         size="icon"
                         variant="outline"
