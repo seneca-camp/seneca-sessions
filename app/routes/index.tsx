@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLoaderData, useRevalidator } from 'react-router';
+import { useLoaderData, useRevalidator, useSearchParams } from 'react-router';
 
 import { useInterval } from '~/utils/interval-hook';
 import { getPublicSchedules, PublicSchedule } from '~/models/schedule';
@@ -24,7 +24,10 @@ export default function IndexRoute() {
     }
 
     const schedules = useLoaderData<typeof loader>();
-    const [chosenSchedule, setChosenSchedule] = useState<PublicSchedule>(schedules[schedules.length - 1]);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const defaultSchedule = schedules.find(schedule => schedule.id === searchParams.get('schedule')) || schedules[schedules.length - 1];
+    const [chosenSchedule, setChosenSchedule] = useState<PublicSchedule>(defaultSchedule);
 
     return (
         <main className="overflow-x-auto">
@@ -36,7 +39,12 @@ export default function IndexRoute() {
                             variant={chosenSchedule.id === schedule.id ? 'solid' : 'outline'}
                             color="primary"
                             size="md"
-                            onClick={() => setChosenSchedule(schedule)}
+                            onClick={() => {
+                                setChosenSchedule(schedule);
+                                const newSearchParams = new URLSearchParams(searchParams);
+                                newSearchParams.set('schedule', schedule.id);
+                                setSearchParams(newSearchParams);
+                            }}
                             className="font-cronos"
                         >
                             {schedule.name}
@@ -48,5 +56,3 @@ export default function IndexRoute() {
         </main>
     );
 }
-
-
