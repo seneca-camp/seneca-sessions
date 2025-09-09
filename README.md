@@ -13,6 +13,7 @@ From your terminal:
 
 ```sh
 npx prisma db push
+npm run db:seed
 npm run dev
 ```
 
