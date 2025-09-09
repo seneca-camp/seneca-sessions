@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 :root {
-    --black: #121212;
+    --black: #181818;
+    --white: #e0e0e0;
     --gray: #231f20;
+
     --brightpetrole: #00abc8;
+    --deeppurple: #ba0946;
     --fancyorange: #f35c19;
 
     --fancyorange-90: #f46a26;
@@ -45,10 +48,22 @@
     --gray-30: #bdbcbc;
     --gray-20: #d3d3d3;
     --gray-10: #e9e9e9;
+
+    --black-90: #181818;
+    --black-80: #212121;
+    --black-70: #393939;
+    --black-60: #4f4f4f;
+    --black-50: #656565;
+    --black-40: #7b7b7b;
+    --black-30: #919191;
+    --black-20: #a7a7a7;
 }
 
 @theme {
   --font-cronos: "CronosPro";
+
+  --color-white: var(--white);
+  --color-black: var(--black);
 
   --color-fancyorange: var(--fancyorange);
   --color-fancyorange-10: var(--fancyorange-10);
@@ -96,5 +111,5 @@
 }
 
 body, html {
-    background-color: var(--black);
+    background-color: var(--black-80);
 }

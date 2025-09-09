@@ -4,12 +4,12 @@ import { Logo } from "~/components/Logo";
 
 export default function Layout() {
     return (
-        <>
-            <header style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+        <div className="p-4">
+            <header className="flex justify-center items-center flex-col mt-4">
                 <Logo />
                 <nav><a href="/" className={styles.headline}>Sessions</a> | <a href="/rooms" className={styles.headline}>Raumplan</a></nav>
             </header>
             <Outlet />
-        </>
+        </div>
     )
 }

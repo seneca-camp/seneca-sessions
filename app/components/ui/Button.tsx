@@ -24,7 +24,7 @@ function colorClasses(color: ButtonColor, variant: ButtonVariant) {
 				accent:
 					"bg-fancyorange text-white hover:bg-fancyorange-90 focus-visible:ring-fancyorange-90",
 				neutral:
-					"bg-gray-800 text-white hover:bg-gray-700 focus-visible:ring-gray-600",
+					"bg-black text-black hover:bg-gray-700 focus-visible:ring-gray-600",
 				danger:
 					"bg-deeppurple text-white hover:bg-deeppurple-90 focus-visible:ring-deeppurple-90",
 			}[color];
@@ -35,7 +35,7 @@ function colorClasses(color: ButtonColor, variant: ButtonVariant) {
 				accent:
 					"border border-fancyorange text-fancyorange hover:bg-fancyorange-10",
 				neutral:
-					"border border-gray-400 text-gray-200 hover:bg-gray-800",
+					"border border-gray-400 text-gray-200 hover:bg-black",
 				danger:
 					"border border-deeppurple text-deeppurple hover:bg-deeppurple-10",
 			}[color];
