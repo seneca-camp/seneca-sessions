@@ -23,7 +23,7 @@ export function SessionTable(props: SessionsViewProps) {
                                 return <td key={`slot-${slotId}-room-${roomIndex}`} className="bg-gray-80 rounded-md"></td>;
                             }
                             return (
-                                <td className={`${session.liked ? 'bg-deeppurple-20 border-deeppurple-40' : 'bg-fancyorange-10 border-fancyorange-40 '} cursor-pointer relative border border-2 rounded-md p-4`}
+                                <td className={`${session.liked ? 'bg-deeppurple-20 border-deeppurple-40' : 'bg-fancyorange-10 border-fancyorange-40 '} cursor-pointer relative border border-2 rounded-md p-4 pr-[40px]`}
                                     key={session.id}
                                     onClick={() => props.toggleLikedness(session.id)}
                                     data-sessionid={session.id}>
