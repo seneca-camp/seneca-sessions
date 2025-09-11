@@ -7,12 +7,12 @@ const db = new PrismaClient();
 
 const schedules = [
     {
-        name: "Samstag '25",
+        name: "Samstag 20.9.",
         date: "2025-09-20",
         isPublic: true,
     },
     {
-        name: "Sonntag '25",
+        name: "Sonntag 21.9.",
         date: "2025-09-21",
         isPublic: true,
     }
