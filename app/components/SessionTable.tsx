@@ -1,6 +1,6 @@
 import { SessionsViewProps } from "./Sessions";
 import { rooms } from "../models/rooms";
-import { LikeButton } from "./LikeButton";
+import { SessionItem } from "./SessionItem";
 
 export function SessionTable(props: SessionsViewProps) {
     return (
@@ -23,16 +23,13 @@ export function SessionTable(props: SessionsViewProps) {
                                 return <td key={`slot-${slotId}-room-${roomIndex}`} className="bg-gray-80 rounded-md"></td>;
                             }
                             return (
-                                <td className={`${session.liked ? 'bg-deeppurple-20 border-deeppurple-40' : 'bg-fancyorange-10 border-fancyorange-40 '} cursor-pointer relative border border-2 rounded-md p-4 pr-[40px]`}
+                                <SessionItem
                                     key={session.id}
-                                    onClick={() => props.toggleLikedness(session.id)}
-                                    data-sessionid={session.id}>
-                                    <LikeButton className="absolute top-0 right-0" liked={session.liked} onClick={() => props.toggleLikedness(session.id)} />
-                                    <div className="flex flex-row justify-between items-start static">
-                                        <p className="font-bold text-gray-90">{session.title}</p>
-                                    </div>
-                                    <Note href={session.note} />
-                                </td>
+                                    data-sessionid={session.id}
+                                    session={session}
+                                    toggleLikedness={props.toggleLikedness}
+                                    as="cell"
+                                />
                             )
                         })}
                     </tr>
@@ -40,12 +37,4 @@ export function SessionTable(props: SessionsViewProps) {
             </tbody>
         </table>
     )
-}
-
-export function Note({ href }: { href: string }) {
-    return (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="text-gray-80 hover:text-gray-80" title="Open session notes">
-            <i className="ri-file-text-line text-lg"></i> Notes 
-        </a>
-    );
 }
