@@ -1,6 +1,6 @@
 import { SessionsViewProps } from "./Sessions";
 import { Badge } from "./ui/Badge";
-import { Button } from "./ui/Button";
+import { LikeButton } from "./LikeButton";
 
 export function SessionList(props: SessionsViewProps) {
     return (
@@ -23,15 +23,7 @@ export function SessionList(props: SessionsViewProps) {
                                             <i className="ri-file-text-line text-lg"></i>
                                         </a>
                                     )}
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        color="accent"
-                                        aria-label={session.liked ? 'Unlike' : 'Like'}
-                                        onClick={() => props.toggleLikedness(session.id)}
-                                    >
-                                        <i className={session.liked ? 'ri-heart-fill text-2xl' : 'ri-heart-line text-2xl'}></i>
-                                    </Button>
+                                    <LikeButton liked={session.liked} onClick={() => props.toggleLikedness(session.id)} />
                                 </div>
                             </div>
                         ))}
