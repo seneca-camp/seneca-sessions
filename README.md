@@ -19,21 +19,18 @@ npm run dev
 
 This starts your app in development mode, rebuilding assets on file changes.
 
-## Deployment
-
-First, build your app for production:
+For production build run:
 
 ```sh
 npm run build
-```
-
-Then run the app in production mode:
-
-```sh
 npm start
 ```
 
-Now you'll need to pick a host to deploy it to.
+## Deployment
+
+To start the production container (with automatic updates via Watchtower), use the provided Docker Compose file:
+
+`docker compose up --file ./docker/docker-compose.yml -d`
 
 ### DIY
 
