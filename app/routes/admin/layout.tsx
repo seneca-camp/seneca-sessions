@@ -1,12 +1,11 @@
 import { Link, Outlet } from "react-router";
 import { Logo } from "~/components/Logo";
-import "~/css/layout.module.css";
 
 export default function AdminLayout() {
     return (
         <div className="h-full pb-4">
             <nav className="flex flex-row gap-4 bg-black p-4 rounded-lg text-white shadow-md mb-4 items-center">
-                <Logo width="30px" />
+                <Logo className="w-[32px]" />
                 <NavLink to="/">
                     <i className="ri-home-line"></i> Home
                 </NavLink>
