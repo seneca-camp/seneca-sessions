@@ -123,13 +123,13 @@ export default function ScheduleRoute() {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function AddSessionForm({
   schedule,
   actionData,
   slots,
 }: {
   schedule: Schedule;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   actionData: any;
   slots: Slot[];
 }) {
