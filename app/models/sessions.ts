@@ -1,89 +1,117 @@
-import { db } from '~/utils/db.server';
+import { db } from "~/utils/db.server";
 import { Prisma, Session } from "@prisma/client";
-import { nanoid } from 'nanoid'
+import { nanoid } from "nanoid";
 
 export async function getSessions(scheduleId: string): Promise<Session[]> {
-    return await db.session.findMany({ where: { scheduleId } });
+  return await db.session.findMany({ where: { scheduleId } });
 }
 
 function createNoteName() {
-    const year = new Date().getFullYear();
-    return `seneca-${year}-${nanoid(6)}`
+  const year = new Date().getFullYear();
+  return `seneca-${year}-${nanoid(6)}`;
 }
 
 export async function createSession(form: FormData) {
-    const scheduleId = String(form.get("scheduleId"));
-    const title = String(form.get("title"));
-    const slot = +String(form.get("slot"));
-    const room = String(form.get("room"));
-    const noteName = createNoteName();
-    const note = new URL(noteName,'https://notes.stuve.fau.de/').toString()
+  const scheduleId = String(form.get("scheduleId"));
+  const title = String(form.get("title"));
+  const slot = +String(form.get("slot"));
+  const room = String(form.get("room"));
+  const noteName = createNoteName();
+  const note = new URL(noteName, "https://notes.stuve.fau.de/").toString();
 
-    if (!title || !room) {
-        throw Error("Missing required input!");
-    }
-    const session: Prisma.SessionCreateInput = { slot, title, room, note, schedule: { connect: { id: scheduleId } } };
+  if (!title || !room) {
+    throw Error("Missing required input!");
+  }
+  const session: Prisma.SessionCreateInput = {
+    slot,
+    title,
+    room,
+    note,
+    schedule: { connect: { id: scheduleId } },
+  };
 
-    let message = null;
+  let message = null;
 
-    if (!await saveSession(session, scheduleId)) {
-        message = `Entry at Room ${room}, Slot #${slot} already exists`;
-    }
-    return { message: message, title, slot, room };
+  if (!(await saveSession(session, scheduleId))) {
+    message = `Entry at Room ${room}, Slot #${slot} already exists`;
+  }
+  return { message: message, title, slot, room };
 }
 
-async function saveSession(session: Prisma.SessionCreateInput, scheduleId: string): Promise<boolean> {
-    const exists = await db.session.count({ where: { slot: session.slot, room: session.room, scheduleId } })
-    if (exists) {
-        return false
-    }
-    await db.session.create({ data: session })
-    return true
+async function saveSession(
+  session: Prisma.SessionCreateInput,
+  scheduleId: string,
+): Promise<boolean> {
+  const exists = await db.session.count({
+    where: { slot: session.slot, room: session.room, scheduleId },
+  });
+  if (exists) {
+    return false;
+  }
+  await db.session.create({ data: session });
+  return true;
 }
 
 export async function deleteSession(form: FormData) {
-    const sessionId = String(form.get("id"));
+  const sessionId = String(form.get("id"));
 
-    const sessionToDelete = await db.session.findFirst({ where: { id: sessionId } });
-    if (!sessionToDelete) {
-        throw Error(`No session found for id: ${sessionId}`);
-    }
-    await db.session.delete({ where: { id: sessionToDelete.id } })
+  const sessionToDelete = await db.session.findFirst({
+    where: { id: sessionId },
+  });
+  if (!sessionToDelete) {
+    throw Error(`No session found for id: ${sessionId}`);
+  }
+  await db.session.delete({ where: { id: sessionToDelete.id } });
 }
 
 export async function switchSessions(form: FormData) {
-    const firstSessionId = form.get("firstSessionId")?.toString();
-    const secondSessionId = form.get("secondSessionId")?.toString();
-    const firstSession = await db.session.findUniqueOrThrow({ where: { id: firstSessionId } });
-    const secondSession = await db.session.findUniqueOrThrow({ where: { id: secondSessionId } });
-    const firstRoom = firstSession.room;
-    const firstSlot = firstSession.slot;
-    await db.session.update({ data: { room: secondSession.room, slot: secondSession.slot }, where: { id: firstSessionId } });
-    await db.session.update({ data: { room: firstRoom, slot: firstSlot }, where: { id: secondSessionId } });
+  const firstSessionId = form.get("firstSessionId")?.toString();
+  const secondSessionId = form.get("secondSessionId")?.toString();
+  const firstSession = await db.session.findUniqueOrThrow({
+    where: { id: firstSessionId },
+  });
+  const secondSession = await db.session.findUniqueOrThrow({
+    where: { id: secondSessionId },
+  });
+  const firstRoom = firstSession.room;
+  const firstSlot = firstSession.slot;
+  await db.session.update({
+    data: { room: secondSession.room, slot: secondSession.slot },
+    where: { id: firstSessionId },
+  });
+  await db.session.update({
+    data: { room: firstRoom, slot: firstSlot },
+    where: { id: secondSessionId },
+  });
 }
 
 export async function moveSession(form: FormData) {
-    const sessionId = form.get("sessionId")?.toString();
-    const toSlot = parseInt(form.get("toSlot")?.toString() ?? "", 10);
-    const toRoom = form.get("toRoom")?.toString();
+  const sessionId = form.get("sessionId")?.toString();
+  const toSlot = parseInt(form.get("toSlot")?.toString() ?? "", 10);
+  const toRoom = form.get("toRoom")?.toString();
 
-    // TODO: Data validation
+  // TODO: Data validation
 
-    if (isNaN(toSlot) || toRoom === undefined) {
-        return;
-    }
+  if (isNaN(toSlot) || toRoom === undefined) {
+    return;
+  }
 
-    const session = await db.session.findUniqueOrThrow({ where: { id: sessionId } });
-    await db.session.update({ data: { room: toRoom, slot: toSlot }, where: { id: session.id } });
+  const session = await db.session.findUniqueOrThrow({
+    where: { id: sessionId },
+  });
+  await db.session.update({
+    data: { room: toRoom, slot: toSlot },
+    where: { id: session.id },
+  });
 }
 
 export async function renameSession(form: FormData) {
-    const sessionId = String(form.get("id"));
-    const title = String(form.get("title"));
+  const sessionId = String(form.get("id"));
+  const title = String(form.get("title"));
 
-    if ((title ?? "").trim().length == 0) {
-        return;
-    }
+  if ((title ?? "").trim().length == 0) {
+    return;
+  }
 
-    await db.session.update({ data: { title }, where: { id: sessionId }, })
+  await db.session.update({ data: { title }, where: { id: sessionId } });
 }
