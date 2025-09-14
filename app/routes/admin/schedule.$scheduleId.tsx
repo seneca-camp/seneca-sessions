@@ -40,7 +40,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
-export const loader = async ({ params }: { params: { scheduleId: string } }) => {
+export const loader = async ({
+  params,
+}: {
+  params: { scheduleId: string };
+}) => {
   const sessions = await getAllSessions(params.scheduleId);
   const schedule = await getSchedule(params.scheduleId);
   return { sessions, schedule };
@@ -74,14 +78,20 @@ export default function ScheduleRoute() {
       <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">
         Add Session
       </h1>
-      <AddSessionForm schedule={schedule} actionData={actionData} slots={slots} />
+      <AddSessionForm
+        schedule={schedule}
+        actionData={actionData}
+        slots={slots}
+      />
       <div className="overflow-x">
         <table className="border-separate border-spacing-2 w-full">
           <thead className="text-lg text-white uppercase">
             <tr key="table-head" className="min-width-fit">
-              <th className="text-left" key="head-1" ></th>
+              <th className="text-left" key="head-1"></th>
               {rooms.map((room) => (
-                <th className="text-white p-2" key={room}>{room}</th>
+                <th className="text-white p-2" key={room}>
+                  {room}
+                </th>
               ))}
             </tr>
           </thead>
@@ -90,9 +100,17 @@ export default function ScheduleRoute() {
               <tr className="min-h-100 min-width-fit px-4" key={"row" + slotId}>
                 <th className="text-xl text-white text-left p-4">{time}</th>
                 {rooms.map((room, roomIndex) => {
-                  const session = sessions.filter(s => s.room === room && s.slot === slotId)[0];
+                  const session = sessions.filter(
+                    (s) => s.room === room && s.slot === slotId,
+                  )[0];
                   if (!session) {
-                    return <EmptySessionSlot key={`slot-${slotId}-room-${roomIndex}`} slotId={slotId} room={room} />;
+                    return (
+                      <EmptySessionSlot
+                        key={`slot-${slotId}-room-${roomIndex}`}
+                        slotId={slotId}
+                        room={room}
+                      />
+                    );
                   }
                   return <SessionSlot key={session.id} session={session} />;
                 })}
@@ -106,7 +124,15 @@ export default function ScheduleRoute() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function AddSessionForm({ schedule, actionData, slots }: { schedule: Schedule, actionData: any, slots: Slot[] }) {
+function AddSessionForm({
+  schedule,
+  actionData,
+  slots,
+}: {
+  schedule: Schedule;
+  actionData: any;
+  slots: Slot[];
+}) {
   return (
     <form
       className="max-w-lg bg-gray-90 font-bold text-white text-md shadow-md rounded-lg px-8 pt-12 pb-8 mb-4"
@@ -159,10 +185,16 @@ function AddSessionForm({ schedule, actionData, slots }: { schedule: Schedule, a
         </label>
       </div>
       <div className="h-8">
-        {actionData?.message && <p className="text-deeppurple p-2 rounded-md bg-deeppurple-10 border-1 border-deeppurple">{actionData.message}</p>}
+        {actionData?.message && (
+          <p className="text-deeppurple p-2 rounded-md bg-deeppurple-10 border-1 border-deeppurple">
+            {actionData.message}
+          </p>
+        )}
       </div>
       <input type="hidden" name="type" value="create" />
-      <Button className="mt-4" variant="solid" color="primary" type="submit">Add</Button>
+      <Button className="mt-4" variant="solid" color="primary" type="submit">
+        Add
+      </Button>
     </form>
-  )
+  );
 }

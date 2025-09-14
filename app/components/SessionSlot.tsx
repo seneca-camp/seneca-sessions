@@ -7,7 +7,7 @@ import { DeleteForm } from "./DeleteForm";
 
 export type SessionSlotProps = {
   session: Session;
-}
+};
 
 export function SessionSlot({ session }: SessionSlotProps) {
   const submit = useSubmit();
@@ -37,7 +37,13 @@ export function SessionSlot({ session }: SessionSlotProps) {
         <EditForm session={session} />
       </div>
       <DeleteForm id={session.id}>
-        <Button size="icon" variant="ghost" color="danger" aria-label="Delete session" className="absolute bottom-0 right-0">
+        <Button
+          size="icon"
+          variant="ghost"
+          color="danger"
+          aria-label="Delete session"
+          className="absolute bottom-0 right-0"
+        >
           <i className="ri-delete-bin-line text-xl"></i>
         </Button>
       </DeleteForm>
@@ -49,18 +55,40 @@ function EditForm({ session }: { session: Session }) {
   const [editModus, setEditModus] = useState(false);
 
   return (
-    <form method="post" action={session.scheduleId} onSubmit={() => setEditModus(false)}>
+    <form
+      method="post"
+      action={session.scheduleId}
+      onSubmit={() => setEditModus(false)}
+    >
       <input type="hidden" name="type" value="rename" />
       <input type="hidden" name="id" value={session.id} />
       <div className="flex flex-row items-center gap-2">
-        <input className={`w-auto ${editModus ? "border-b-2 border-black" : ""}`} readOnly={!editModus} type="text" name="title" defaultValue={session.title} />
+        <input
+          className={`w-auto ${editModus ? "border-b-2 border-black" : ""}`}
+          readOnly={!editModus}
+          type="text"
+          name="title"
+          defaultValue={session.title}
+        />
         {!editModus && (
-          <Button size="icon" variant="ghost" color="neutral" aria-label="Edit title" onClick={() => setEditModus(!editModus)}>
+          <Button
+            size="icon"
+            variant="ghost"
+            color="neutral"
+            aria-label="Edit title"
+            onClick={() => setEditModus(!editModus)}
+          >
             <i className="ri-pencil-line hover:text-white text-black text-xl"></i>
           </Button>
         )}
         {editModus && (
-          <Button size="icon" variant="ghost" color="neutral" aria-label="Save title" type="submit">
+          <Button
+            size="icon"
+            variant="ghost"
+            color="neutral"
+            aria-label="Save title"
+            type="submit"
+          >
             <i className="ri-check-line hover:text-white text-black text-xl"></i>
           </Button>
         )}

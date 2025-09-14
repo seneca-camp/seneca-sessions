@@ -1,12 +1,12 @@
-import type { LinksFunction } from 'react-router';
-import '~/css/tailwind.css';
-import 'remixicon/fonts/remixicon.css'
+import type { LinksFunction } from "react-router";
+import "~/css/tailwind.css";
+import "remixicon/fonts/remixicon.css";
 
-import { Links, Outlet, Scripts } from 'react-router';
-import Footer from './components/Footer';
+import { Links, Outlet, Scripts } from "react-router";
+import Footer from "./components/Footer";
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: "https://fonts.cdnfonts.com/css/cronospro" }
+  { rel: "stylesheet", href: "https://fonts.cdnfonts.com/css/cronospro" },
 ];
 
 export default function App() {
@@ -14,10 +14,7 @@ export default function App() {
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Links />
         <Scripts />
         <title>Seneca Sessions</title>

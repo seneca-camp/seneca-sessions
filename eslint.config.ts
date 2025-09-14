@@ -9,29 +9,58 @@ import { tailwind4 } from "tailwind-csstree";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(['public/build/*', 'build/*', 'package-lock.json', '.react-router/*']),
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  tseslint.configs.recommended,
-  pluginReact.configs.flat['jsx-runtime'],
-  { files: ["**/*.json"], plugins: { json }, language: "json/json", extends: ["json/recommended"] },
-  { files: ["**/*.md"], plugins: { markdown }, language: "markdown/commonmark", extends: ["markdown/recommended"] },
+  globalIgnores([
+    "public/build/*",
+    "build/*",
+    "package-lock.json",
+    ".react-router/*",
+  ]),
   {
-    files: ["**/*.css"], plugins: { css }, language: "css/css", extends: ["css/recommended"],
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
+  },
+  tseslint.configs.recommended,
+  pluginReact.configs.flat["jsx-runtime"],
+  {
+    files: ["**/*.json"],
+    plugins: { json },
+    language: "json/json",
+    extends: ["json/recommended"],
+  },
+  {
+    files: ["**/*.md"],
+    plugins: { markdown },
+    language: "markdown/commonmark",
+    extends: ["markdown/recommended"],
+  },
+  {
+    files: ["**/*.css"],
+    plugins: { css },
+    language: "css/css",
+    extends: ["css/recommended"],
     languageOptions: {
       customSyntax: tailwind4,
     },
     rules: {
-      'css/no-invalid-properties': 'off',
-      'css/use-baseline': ['error', {
-        allowProperties: ['outline'],
-      }],
-    }
+      "css/no-invalid-properties": "off",
+      "css/use-baseline": [
+        "error",
+        {
+          allowProperties: ["outline"],
+        },
+      ],
+    },
   },
   {
     rules: {
-      '@typescript-eslint/no-unused-vars': ['error', {
-        ignoreRestSiblings: true,
-      }],
-    }
-  }
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          ignoreRestSiblings: true,
+        },
+      ],
+    },
+  },
 ]);

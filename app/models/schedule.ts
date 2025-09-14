@@ -2,19 +2,30 @@ import { Schedule } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
 export async function getSchedule(scheduleId: string): Promise<Schedule> {
-    return await db.schedule.findUniqueOrThrow({ where: { id: scheduleId } });
+  return await db.schedule.findUniqueOrThrow({ where: { id: scheduleId } });
 }
 
-export type PublicSchedule = Awaited<ReturnType<typeof getPublicSchedules>>[number];
+export type PublicSchedule = Awaited<
+  ReturnType<typeof getPublicSchedules>
+>[number];
 
 export async function getPublicSchedules() {
-    return await db.schedule.findMany({ where: { isPublic: true }, orderBy: { date: "asc" }, include: { sessions: true } });
+  return await db.schedule.findMany({
+    where: { isPublic: true },
+    orderBy: { date: "asc" },
+    include: { sessions: true },
+  });
 }
 
 export async function toggleVisibility(form: FormData) {
-    const scheduleId = form.get("scheduleId")?.toString();
-    const schedule = await db.schedule.findUniqueOrThrow({ where: { id: scheduleId } });
-    await db.schedule.update({ where: { id: scheduleId }, data: { isPublic: !schedule.isPublic } });
+  const scheduleId = form.get("scheduleId")?.toString();
+  const schedule = await db.schedule.findUniqueOrThrow({
+    where: { id: scheduleId },
+  });
+  await db.schedule.update({
+    where: { id: scheduleId },
+    data: { isPublic: !schedule.isPublic },
+  });
 }
 
 export async function createSchedule(form: FormData) {
@@ -34,7 +45,7 @@ export async function createSchedule(form: FormData) {
 }
 
 export async function deleteSchedule(form: FormData) {
-    const scheduleId = String(form.get("id"));
-    await db.session.deleteMany({ where: { scheduleId } });
-    await db.schedule.delete({ where: { id: scheduleId } });
+  const scheduleId = String(form.get("id"));
+  await db.session.deleteMany({ where: { scheduleId } });
+  await db.schedule.delete({ where: { id: scheduleId } });
 }
