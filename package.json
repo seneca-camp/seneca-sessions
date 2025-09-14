@@ -9,6 +9,8 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "lint": "eslint",
+    "prettier:check": "prettier . --check",
+    "prettier:fix": "prettier . --write",
     "db:generate": "prisma generate",
     "db:seed": "tsx prisma/seed.ts"
   },
@@ -42,6 +44,7 @@
     "eslint-plugin-react": "7.37.5",
     "globals": "16.3.0",
     "jiti": "2.5.1",
+    "prettier": "3.6.2",
     "prisma": "6.15.0",
     "tailwind-csstree": "0.1.4",
     "tailwindcss": "4.1.12",
