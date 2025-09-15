@@ -1,0 +1,15 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/ubuntu/.docker/config.json:/config.json
+    command: --interval 60
+
+  seneca-sessions:
+    image: "ghcr.io/seneca-camp/seneca-sessions:latest"
+    container_name: "seneca-sessions"
+    ports:
+      - "44332:3000"
+    volumes:
+      - ../appdb:/app/appdb
