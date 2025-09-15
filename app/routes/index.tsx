@@ -48,9 +48,10 @@ export default function IndexRoute() {
     useState<PublicSchedule>(defaultSchedule);
 
   const toggleOnlyLiked = () => {
-    setOnlyLiked(!onlyLiked);
+    const newState = !onlyLiked;
+    setOnlyLiked(newState);
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set("onlyLiked", onlyLiked.toString());
+    newSearchParams.set("onlyLiked", newState.toString());
     setSearchParams(newSearchParams);
   };
 
