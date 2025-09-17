@@ -1,6 +1,6 @@
 export default function Rooms() {
   return (
-    <main className="bg-white rounded-lg mt-4">
+    <main className="mt-4 flex flex-col items-center">
       <img src="eg.png" />
       <img src="og.png" />
     </main>
