@@ -14,6 +14,7 @@ export default [
   ...prefix("admin", [
     layout("./routes/admin/layout.tsx", [
       index("./routes/admin/index.tsx"),
+      route("rooms", "./routes/admin/rooms.tsx"),
       route("schedule/:scheduleId", "./routes/admin/schedule.$scheduleId.tsx"),
     ]),
   ]),

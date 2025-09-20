@@ -9,7 +9,7 @@ export default function AdminLayout() {
         <NavLink to="/">
           <i className="ri-home-line"></i> Home
         </NavLink>
-        <NavLink to="/rooms">
+        <NavLink to="/admin/rooms">
           <i className="ri-presentation-line"></i> Rooms
         </NavLink>
         <NavLink to="/admin">

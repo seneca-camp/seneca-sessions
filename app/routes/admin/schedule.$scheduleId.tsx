@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useInterval } from "~/utils/interval-hook";
 
-import { rooms } from "~/models/rooms";
+import { getRoomNames } from "~/models/rooms";
 import {
   createSession,
   deleteSession,
