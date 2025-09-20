@@ -20,7 +20,7 @@ export function LikeButton({
       onClick={props.onClick}
       className={props.className}
     >
-      <div className="flex items-center gap-1">
+      <div className="flex items-center p-1">
         <i
           className={
             liked ? "ri-heart-fill text-2xl" : "ri-heart-line text-2xl"

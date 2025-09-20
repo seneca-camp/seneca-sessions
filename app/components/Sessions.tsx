@@ -1,11 +1,12 @@
-import { useHydrated } from "remix-utils/use-hydrated";
-import { Slot } from "~/models/slots";
 import { Session } from "@prisma/client";
 import { useEffect } from "react";
+import { useRevalidator } from "react-router";
+import { useHydrated } from "remix-utils/use-hydrated";
 import { usePersistedState } from "~/hooks/persistedState";
-import { SessionTable } from "./SessionTable";
+import { Slot } from "~/models/slots";
 import { getRandomUserId } from "~/utils/user-id";
 import { SessionList } from "./SessionList";
+import { SessionTable } from "./SessionTable";
 
 export type UserSession = Session & {
   liked: boolean;
@@ -30,6 +31,7 @@ export function Sessions(props: {
   likeCountBySessionId: Map<string, number>;
 }) {
   const isHydrated = useHydrated();
+  const revalidator = useRevalidator();
   const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>(
     [],
     "liked-session-ids",
@@ -55,7 +57,6 @@ export function Sessions(props: {
     }))
     .filter((session) => (props.onlyLiked ? session.liked : true));
 
-  // Sync likes on mount and whenever likedSessionIds changes
   useEffect(() => {
     if (!isHydrated) return;
     const userId = getRandomUserId();
@@ -66,7 +67,9 @@ export function Sessions(props: {
       body: JSON.stringify({ userId, likedSessionIds }),
       signal: controller.signal,
       keepalive: true,
-    }).catch(() => {});
+    }).catch(() => {}).then(() => {
+      revalidator.revalidate();
+    })
     return () => controller.abort();
   }, [isHydrated, likedSessionIds]);
 
