@@ -1,12 +1,15 @@
 import { useHydrated } from "remix-utils/use-hydrated";
 import { Slot } from "~/models/slots";
 import { Session } from "@prisma/client";
+import { useEffect } from "react";
 import { usePersistedState } from "~/hooks/persistedState";
 import { SessionTable } from "./SessionTable";
+import { getRandomUserId } from "~/utils/user-id";
 import { SessionList } from "./SessionList";
 
 export type UserSession = Session & {
   liked: boolean;
+  likeCount?: number;
 };
 
 export type SessionsViewProps = {
@@ -24,6 +27,7 @@ export function Sessions(props: {
   view: SessionView;
   onlyLiked: boolean;
   rooms: string[];
+  likeCountBySessionId: Map<string, number>;
 }) {
   const isHydrated = useHydrated();
   const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>(
@@ -47,8 +51,24 @@ export function Sessions(props: {
     .map((session) => ({
       ...session,
       liked: isLiked(session.id),
+      likeCount: props.likeCountBySessionId.get(session.id) ?? 0,
     }))
     .filter((session) => (props.onlyLiked ? session.liked : true));
+
+  // Sync likes on mount and whenever likedSessionIds changes
+  useEffect(() => {
+    if (!isHydrated) return;
+    const userId = getRandomUserId();
+    const controller = new AbortController();
+    fetch("/api/likes/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, likedSessionIds }),
+      signal: controller.signal,
+      keepalive: true,
+    }).catch(() => {});
+    return () => controller.abort();
+  }, [isHydrated, likedSessionIds]);
 
   return (
     <div className="overflow-x-auto">

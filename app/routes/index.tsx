@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLoaderData, useRevalidator, useSearchParams } from "react-router";
 
 import { useInterval } from "~/utils/interval-hook";
@@ -57,6 +57,18 @@ export default function IndexRoute() {
     newSearchParams.set("onlyLiked", newState.toString());
     setSearchParams(newSearchParams);
   };
+
+  // Build a map of sessionId -> likeCount from loader data
+  const likeCountBySessionId = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const s of schedules) {
+        for (const sess of s.sessions) {
+          const c = (sess._count && sess._count.likedBy) || 0;
+        map.set(sess.id, c as number);
+      }
+    }
+    return map;
+  }, [schedules]);
 
   return (
     <>
@@ -120,6 +132,7 @@ export default function IndexRoute() {
             view={view}
             onlyLiked={onlyLiked}
             rooms={rooms}
+            likeCountBySessionId={likeCountBySessionId}
           />
         </>
       )}

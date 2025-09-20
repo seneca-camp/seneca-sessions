@@ -39,6 +39,7 @@ function SessionContent(props: SessionItemProps) {
       <LikeButton
         className="absolute top-0 right-0"
         liked={props.session.liked}
+        count={props.session.likeCount}
         onClick={() => props.toggleLikedness(props.session.id)}
       />
     </>

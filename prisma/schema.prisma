@@ -34,4 +34,15 @@ model Session {
 
   schedule   Schedule @relation(fields: [scheduleId], references: [id])
   scheduleId String
+
+  likedBy LikedSession[]
+}
+
+model LikedSession {
+  id        String  @id @default(cuid())
+  userId    String
+  session   Session @relation(fields: [sessionId], references: [id])
+  sessionId String
+
+  @@unique([userId, sessionId])
 }

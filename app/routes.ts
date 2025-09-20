@@ -1,15 +1,16 @@
 import {
   type RouteConfig,
-  route,
   index,
   layout,
   prefix,
+  route,
 } from "@react-router/dev/routes";
 
 export default [
   layout("./routes/layout.tsx", [
     index("./routes/index.tsx"),
     route("rooms", "./routes/rooms.tsx"),
+    route("api/likes/sync", "./routes/api.likes.sync.tsx"),
   ]),
   ...prefix("admin", [
     layout("./routes/admin/layout.tsx", [

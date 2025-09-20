@@ -2,10 +2,12 @@ import Button, { ButtonProps } from "./ui/Button";
 
 export type LikeButtonProps = {
   liked: boolean;
+  count?: number;
 } & ButtonProps;
 
 export function LikeButton({
   liked,
+  count,
   variant = "ghost",
   ...props
 }: LikeButtonProps) {
@@ -18,9 +20,16 @@ export function LikeButton({
       onClick={props.onClick}
       className={props.className}
     >
-      <i
-        className={liked ? "ri-heart-fill text-2xl" : "ri-heart-line text-2xl"}
-      ></i>
+      <div className="flex items-center gap-1">
+        <i
+          className={
+            liked ? "ri-heart-fill text-2xl" : "ri-heart-line text-2xl"
+          }
+        ></i>
+        {typeof count === "number" && (
+          <span className="text-base min-w-4 text-center">{count}</span>
+        )}
+      </div>
     </Button>
   );
 }
