@@ -7,9 +7,12 @@ import { getSlots } from "~/models/slots";
 import { Sessions, SessionView } from "~/components/Sessions";
 import Button from "~/components/ui/Button";
 import { LikeButton } from "~/components/LikeButton";
+import { getRoomNames } from "~/models/rooms";
 
 export const loader = async () => {
-  return await getPublicSchedules();
+  const schedules = await getPublicSchedules();
+  const rooms = await getRoomNames();
+  return { schedules, rooms };
 };
 
 export default function IndexRoute() {
@@ -31,7 +34,7 @@ export default function IndexRoute() {
     useInterval(revalidator.revalidate, shouldRevalidate ? 5000 : null);
   }
 
-  const schedules = useLoaderData<typeof loader>();
+  const { schedules, rooms } = useLoaderData<typeof loader>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [view, setView] = useState<SessionView>(
     (searchParams.get("view") as SessionView) || "table",
@@ -116,6 +119,7 @@ export default function IndexRoute() {
             sessions={chosenSchedule.sessions}
             view={view}
             onlyLiked={onlyLiked}
+            rooms={rooms}
           />
         </>
       )}

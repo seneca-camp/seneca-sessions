@@ -47,12 +47,13 @@ export const loader = async ({
 }) => {
   const sessions = await getAllSessions(params.scheduleId);
   const schedule = await getSchedule(params.scheduleId);
-  return { sessions, schedule };
+  const rooms = await getRoomNames();
+  return { sessions, schedule, rooms };
 };
 
 export default function ScheduleRoute() {
   const actionData = useActionData();
-  const { sessions, schedule } = useLoaderData<typeof loader>();
+  const { sessions, schedule, rooms } = useLoaderData<typeof loader>();
   const slots = getSlots(schedule);
 
   if (typeof document !== "undefined") {
@@ -78,11 +79,7 @@ export default function ScheduleRoute() {
       <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">
         Add Session
       </h1>
-      <AddSessionForm
-        schedule={schedule}
-        actionData={actionData}
-        slots={slots}
-      />
+      <AddSessionForm schedule={schedule} actionData={actionData} slots={slots} rooms={rooms} />
       <div className="overflow-x">
         <table className="border-separate border-spacing-2 w-full">
           <thead className="text-lg text-white uppercase">
@@ -127,11 +124,13 @@ function AddSessionForm({
   schedule,
   actionData,
   slots,
+  rooms,
 }: {
   schedule: Schedule;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   actionData: any;
   slots: Slot[];
+  rooms: string[];
 }) {
   return (
     <form

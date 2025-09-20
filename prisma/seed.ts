@@ -1,6 +1,6 @@
-import { PrismaClient, Schedule } from "@prisma/client";
 import { faker } from "@faker-js/faker";
-import { rooms } from "../app/models/rooms";
+import { PrismaClient, Schedule } from "@prisma/client";
+import { DEFAULT_ROOMS } from "../app/models/rooms";
 import { getSlots, Slot } from "../app/models/slots";
 
 const db = new PrismaClient();
@@ -21,6 +21,7 @@ const schedules = [
 async function main() {
   console.log("Seeding database...");
   await clearDatabase();
+  await seedRooms();
 
   for (const scheduleData of schedules) {
     const schedule = await db.schedule.create({
@@ -36,10 +37,19 @@ async function main() {
   console.log("Seed completed.");
 }
 
+async function seedRooms() {
+  let position = 0;
+  for (const name of DEFAULT_ROOMS) {
+    await db.room.create({ data: { name, position: position++ } });
+  }
+}
+
 async function seedSessions(schedule: Schedule) {
   const slots = getSlots(schedule);
+  const dbRooms = await db.room.findMany({ orderBy: { position: "asc" } });
+  const roomNames = dbRooms.map((r) => r.name);
   for (const slot of slots) {
-    for (const room of rooms) {
+    for (const room of roomNames) {
       if (probability(0.3)) {
         continue;
       }

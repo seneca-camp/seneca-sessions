@@ -13,6 +13,7 @@ export type SessionsViewProps = {
   slots: Slot[];
   sessions: UserSession[];
   toggleLikedness: (sessionId: string) => void;
+  rooms: string[];
 };
 
 export type SessionView = "table" | "list";
@@ -22,6 +23,7 @@ export function Sessions(props: {
   sessions: Session[];
   view: SessionView;
   onlyLiked: boolean;
+  rooms: string[];
 }) {
   const isHydrated = useHydrated();
   const [likedSessionIds, setLikedSessionIds] = usePersistedState<string[]>(
@@ -55,6 +57,7 @@ export function Sessions(props: {
           slots={props.slots}
           sessions={userSessions}
           toggleLikedness={toggleLikedness}
+          rooms={props.rooms}
         />
       )}
       {props.view === "list" && (
@@ -62,6 +65,7 @@ export function Sessions(props: {
           slots={props.slots}
           sessions={userSessions}
           toggleLikedness={toggleLikedness}
+          rooms={props.rooms}
         />
       )}
     </div>

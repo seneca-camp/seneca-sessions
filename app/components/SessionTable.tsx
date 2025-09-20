@@ -1,8 +1,8 @@
 import { SessionsViewProps } from "./Sessions";
-import { rooms } from "../models/rooms";
 import { SessionItem } from "./SessionItem";
 
 export function SessionTable(props: SessionsViewProps) {
+  const rooms = props.rooms ?? [];
   return (
     <table className="border-separate border-spacing-2 w-full">
       <thead className="text-lg text-white uppercase">

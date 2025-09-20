@@ -19,10 +19,16 @@ model Schedule {
   sessions Session[]
 }
 
+model Room {
+  id       String @id @default(cuid())
+  name     String @unique
+  position Int    @unique
+}
+
 model Session {
   id    String @id @default(cuid())
   title String
-  room  String
+  room  String // TODO: This should be a relation to the Room model
   slot  Int
   note  String
 
