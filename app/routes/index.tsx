@@ -50,6 +50,10 @@ export default function IndexRoute() {
   const [chosenSchedule, setChosenSchedule] =
     useState<PublicSchedule>(defaultSchedule);
 
+  useEffect(() => {
+    setChosenSchedule(defaultSchedule);
+  }, [JSON.stringify(defaultSchedule)]);
+
   const toggleOnlyLiked = () => {
     const newState = !onlyLiked;
     setOnlyLiked(newState);
@@ -103,6 +107,7 @@ export default function IndexRoute() {
             </Button>
             {schedules.map((schedule) => (
               <Button
+                key={schedule.id}
                 variant={
                   chosenSchedule.id === schedule.id ? "solid" : "outline"
                 }
