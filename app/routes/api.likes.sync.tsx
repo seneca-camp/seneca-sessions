@@ -11,15 +11,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       likedSessionIds?: string[];
     };
 
-    if (!userId || !Array.isArray(likedSessionIds) || likedSessionIds.some((it) => typeof it !== "string")) {
+    if (
+      !userId ||
+      !Array.isArray(likedSessionIds) ||
+      likedSessionIds.some((it) => typeof it !== "string")
+    ) {
       return data({ error: "Invalid payload" }, { status: 400 });
     }
 
     await db.likedSession.deleteMany({ where: { userId } });
     if (likedSessionIds.length > 0) {
-     const deduplicatedLikedSessionIds = Array.from(new Set(likedSessionIds));
+      const deduplicatedLikedSessionIds = Array.from(new Set(likedSessionIds));
       await db.likedSession.createMany({
-        data: deduplicatedLikedSessionIds.map((sessionId) => ({ userId, sessionId })),
+        data: deduplicatedLikedSessionIds.map((sessionId) => ({
+          userId,
+          sessionId,
+        })),
       });
     }
 
@@ -30,5 +37,3 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async () => new Response("", { status: 405 });
-
-

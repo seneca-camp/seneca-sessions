@@ -66,8 +66,8 @@ export default function IndexRoute() {
   const likeCountBySessionId = useMemo(() => {
     const map = new Map<string, number>();
     for (const s of schedules) {
-        for (const sess of s.sessions) {
-          const c = (sess._count && sess._count.likedBy) || 0;
+      for (const sess of s.sessions) {
+        const c = (sess._count && sess._count.likedBy) || 0;
         map.set(sess.id, c as number);
       }
     }

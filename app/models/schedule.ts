@@ -10,19 +10,17 @@ export type PublicSchedule = Awaited<
 >[number];
 
 export async function getPublicSchedules() {
-  return (await db.schedule.findMany({
+  return await db.schedule.findMany({
     where: { isPublic: true },
     orderBy: { date: "asc" },
-    include: (
-      {
-        sessions: {
-          include: {
-            _count: { select: { likedBy: true } },
-          },
+    include: {
+      sessions: {
+        include: {
+          _count: { select: { likedBy: true } },
         },
-      }
-    ),
-  }));
+      },
+    },
+  });
 }
 
 export async function toggleVisibility(form: FormData) {

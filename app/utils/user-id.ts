@@ -10,5 +10,3 @@ export function getRandomUserId(): string {
   window.localStorage.setItem(storageKey, newId);
   return newId;
 }
-
-

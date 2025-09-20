@@ -67,9 +67,11 @@ export function Sessions(props: {
       body: JSON.stringify({ userId, likedSessionIds }),
       signal: controller.signal,
       keepalive: true,
-    }).catch(() => {}).then(() => {
-      revalidator.revalidate();
     })
+      .catch(() => {})
+      .then(() => {
+        revalidator.revalidate();
+      });
     return () => controller.abort();
   }, [isHydrated, likedSessionIds]);
 
