@@ -6,9 +6,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return data({ error: "Method not allowed" }, { status: 405 });
   }
   try {
-    const { userId, likedSessionIds } = (await request.json()) as {
+    const { userId, scheduleId, likedSessionIds } = (await request.json()) as {
       userId?: string;
       likedSessionIds?: string[];
+      scheduleId?: string;
     };
 
     if (
@@ -19,9 +20,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return data({ error: "Invalid payload" }, { status: 400 });
     }
 
+    const existingSessionIds = await db.session.findMany({
+      select: { id: true },
+      where: { scheduleId },
+    });
+
     await db.likedSession.deleteMany({ where: { userId } });
+
+    const likedSessionIdsOfExistingSessions = likedSessionIds.filter(
+      (sessionId) =>
+        existingSessionIds.some(
+          (existingSessionId) => existingSessionId.id === sessionId,
+        ),
+    );
+
     if (likedSessionIds.length > 0) {
-      const deduplicatedLikedSessionIds = Array.from(new Set(likedSessionIds));
+      const deduplicatedLikedSessionIds = Array.from(
+        new Set(likedSessionIdsOfExistingSessions),
+      );
       await db.likedSession.createMany({
         data: deduplicatedLikedSessionIds.map((sessionId) => ({
           userId,

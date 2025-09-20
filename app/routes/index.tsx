@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLoaderData, useRevalidator, useSearchParams } from "react-router";
 
-import { useInterval } from "~/utils/interval-hook";
-import { getPublicSchedules, PublicSchedule } from "~/models/schedule";
-import { getSlots } from "~/models/slots";
+import { LikeButton } from "~/components/LikeButton";
 import { Sessions, SessionView } from "~/components/Sessions";
 import Button from "~/components/ui/Button";
-import { LikeButton } from "~/components/LikeButton";
 import { getRoomNames } from "~/models/rooms";
+import { getPublicSchedules, PublicSchedule } from "~/models/schedule";
+import { getSlots } from "~/models/slots";
+import { useInterval } from "~/utils/interval-hook";
 
 export const loader = async () => {
   const schedules = await getPublicSchedules();
@@ -132,6 +132,7 @@ export default function IndexRoute() {
             />
           </div>
           <Sessions
+            scheduleId={chosenSchedule.id}
             slots={getSlots(chosenSchedule)}
             sessions={chosenSchedule.sessions}
             view={view}

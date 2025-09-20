@@ -23,6 +23,7 @@ export type SessionsViewProps = {
 export type SessionView = "table" | "list";
 
 export function Sessions(props: {
+  scheduleId: string;
   slots: Slot[];
   sessions: Session[];
   view: SessionView;
@@ -64,7 +65,11 @@ export function Sessions(props: {
     fetch("/api/likes/sync", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, likedSessionIds }),
+      body: JSON.stringify({
+        userId,
+        scheduleId: props.scheduleId,
+        likedSessionIds,
+      }),
       signal: controller.signal,
       keepalive: true,
     })
