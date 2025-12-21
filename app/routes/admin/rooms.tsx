@@ -3,12 +3,12 @@ import { DeleteForm } from "~/components/DeleteForm";
 import Button from "~/components/ui/Button";
 import { ListItem } from "~/components/ui/ListItem";
 import {
-    createRoom,
-    deleteRoom,
-    getRooms,
-    moveRoomDown,
-    moveRoomUp,
-    renameRoom,
+  createRoom,
+  deleteRoom,
+  getRooms,
+  moveRoomDown,
+  moveRoomUp,
+  renameRoom,
 } from "~/models/rooms";
 
 export const loader = async () => {
@@ -92,9 +92,7 @@ export default function AdminRoomsRoute() {
               </div>
             </ListItem>
           ))}
-        {rooms.length === 0 && (
-          <li className="text-gray-300">No rooms yet.</li>
-        )}
+        {rooms.length === 0 && <li className="text-gray-300">No rooms yet.</li>}
       </ul>
 
       <h2 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">
@@ -142,5 +140,3 @@ function RenameForm({ id, name }: { id: string; name: string }) {
     </form>
   );
 }
-
-

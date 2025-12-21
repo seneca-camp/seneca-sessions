@@ -1,7 +1,6 @@
 import { Room } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
-
 export const DEFAULT_ROOMS: string[] = [
   "Diogenes' Fass",
   "Putnams Tank",
@@ -32,7 +31,7 @@ export async function createRoom(
   if (!trimmed) {
     return { error: "Name is required" };
   }
-  const roomClient = db.room
+  const roomClient = db.room;
   const exists = await roomClient.findFirst({ where: { name: trimmed } });
   if (exists) {
     return { error: "Room already exists" };
@@ -49,7 +48,7 @@ export async function renameRoom(id: string, name: string) {
   if (!trimmed) {
     return { error: "Name is required" };
   }
-  const roomClient = db.room
+  const roomClient = db.room;
   const dup = await roomClient.findFirst({
     where: { name: trimmed, NOT: { id } },
   });
@@ -60,12 +59,12 @@ export async function renameRoom(id: string, name: string) {
 }
 
 export async function deleteRoom(id: string) {
-  const roomClient = db.room
+  const roomClient = db.room;
   await roomClient.delete({ where: { id } });
 }
 
 export async function moveRoomUp(id: string) {
-  const roomClient = db.room
+  const roomClient = db.room;
   const current = await roomClient.findUniqueOrThrow({ where: { id } });
   const above = await roomClient.findFirst({
     where: { position: { lt: current.position } },
@@ -76,7 +75,7 @@ export async function moveRoomUp(id: string) {
 }
 
 export async function moveRoomDown(id: string) {
-  const roomClient = db.room
+  const roomClient = db.room;
   const current = await roomClient.findUniqueOrThrow({ where: { id } });
   const below = await roomClient.findFirst({
     where: { position: { gt: current.position } },
@@ -93,7 +92,13 @@ async function swapPositions(a: Room, b: Room) {
     const temp = (max._max.position ?? -1) + 1;
 
     await roomClient.update({ where: { id: a.id }, data: { position: temp } });
-    await roomClient.update({ where: { id: b.id }, data: { position: a.position } });
-    await roomClient.update({ where: { id: a.id }, data: { position: b.position } });
+    await roomClient.update({
+      where: { id: b.id },
+      data: { position: a.position },
+    });
+    await roomClient.update({
+      where: { id: a.id },
+      data: { position: b.position },
+    });
   });
 }

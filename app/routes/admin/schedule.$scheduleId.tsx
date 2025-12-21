@@ -79,7 +79,12 @@ export default function ScheduleRoute() {
       <h1 className="mb-4 text-2xl font-bold leading-none tracking-tight text-white">
         Add Session
       </h1>
-      <AddSessionForm schedule={schedule} actionData={actionData} slots={slots} rooms={rooms} />
+      <AddSessionForm
+        schedule={schedule}
+        actionData={actionData}
+        slots={slots}
+        rooms={rooms}
+      />
       <div className="overflow-x">
         <table className="border-separate border-spacing-2 w-full">
           <thead className="text-lg text-white uppercase">
