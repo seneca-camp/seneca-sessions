@@ -1,4 +1,4 @@
-import { Room } from "@prisma/client";
+import { Room } from "~/generated/client";
 import { db } from "~/utils/db.server";
 
 export const DEFAULT_ROOMS: string[] = [

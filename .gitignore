@@ -8,3 +8,4 @@ db.sqlite
 appdb/
 /.react-router
 /.idea
+/app/generated

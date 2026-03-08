@@ -20,7 +20,7 @@ import { SessionSlot } from "~/components/SessionSlot";
 import { EmptySessionSlot } from "~/components/EmptySessionSlot";
 import { getSlots, Slot } from "~/models/slots";
 import { getSchedule } from "~/models/schedule";
-import { Schedule } from "@prisma/client";
+import { Schedule } from "~/generated/client";
 import { Button } from "~/components/ui/Button";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
