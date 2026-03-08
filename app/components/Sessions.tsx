@@ -1,6 +1,6 @@
 import { useHydrated } from "remix-utils/use-hydrated";
 import { Slot } from "~/models/slots";
-import { Session } from "@prisma/client";
+import { Session } from "~/generated/client";
 import { usePersistedState } from "~/hooks/persistedState";
 import { SessionTable } from "./SessionTable";
 import { SessionList } from "./SessionList";

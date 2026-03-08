@@ -1,9 +1,12 @@
+import "dotenv/config";
 import { faker } from "@faker-js/faker";
-import { PrismaClient, Schedule } from "@prisma/client";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient, Schedule } from "../app/generated/client";
 import { DEFAULT_ROOMS } from "../app/models/rooms";
 import { getSlots, Slot } from "../app/models/slots";
 
-const db = new PrismaClient();
+const adapter = new PrismaBetterSqlite3({ url: process.env["DATABASE_URL"] });
+const db = new PrismaClient({ adapter });
 
 const schedules = [
   {

@@ -1,5 +1,5 @@
 import { db } from "~/utils/db.server";
-import { Prisma, Session } from "@prisma/client";
+import { Prisma, Session } from "~/generated/client";
 import { nanoid } from "nanoid";
 
 export async function getSessions(scheduleId: string): Promise<Session[]> {

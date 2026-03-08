@@ -8,7 +8,7 @@ import {
 import { DeleteForm } from "~/components/DeleteForm";
 import { ListItem } from "~/components/ui/ListItem";
 import Button from "~/components/ui/Button";
-import { Schedule } from "@prisma/client";
+import { Schedule } from "~/generated/client";
 
 export const loader = async () => {
   const schedules = await db.schedule.findMany({ orderBy: { date: "asc" } });

@@ -1,4 +1,4 @@
-import { Schedule } from "@prisma/client";
+import { Schedule } from "~/generated/client";
 
 export type Slot = {
   id: number;

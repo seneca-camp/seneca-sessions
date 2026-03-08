@@ -1,4 +1,4 @@
-import { Session } from "@prisma/client";
+import { Session } from "~/generated/client";
 import { useState } from "react";
 import { useSubmit } from "react-router";
 import { DragDropCell } from "./DragDropCell";
