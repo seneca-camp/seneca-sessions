@@ -4,7 +4,7 @@ node_modules
 /build
 /public/build
 .env
-prisma/db.sqlite
+db.sqlite
 appdb/
 /.react-router
 /.idea
