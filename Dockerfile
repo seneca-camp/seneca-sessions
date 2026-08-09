@@ -2,24 +2,31 @@ FROM node:alpine AS builder
 
 WORKDIR /app/
 
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
+
 COPY ./ .
 
 ENV DATABASE_URL="file:/appdb/db.sqlite"
 
-RUN npm ci && \
-    npm run db:generate && \
+RUN npm run db:generate && \
     npm run build
 
 FROM node:alpine
 
 WORKDIR /app/
 
+COPY --from=builder /app/package.json /app/package-lock.json ./
+
+RUN npm ci --omit=dev --omit=optional
+
 COPY --from=builder /app/build ./build/
 COPY --from=builder /app/prisma ./prisma/
-COPY --from=builder /app/prisma.config.ts /app/package.json /app/package-lock.json /app/startup.sh ./
+COPY --from=builder /app/prisma.config.ts /app/startup.sh ./
 
 RUN apk add sqlite && \
-    npm ci --omit=dev --omit=optional && \
     mkdir -p /appdb && \
     chown node:node /appdb
 
