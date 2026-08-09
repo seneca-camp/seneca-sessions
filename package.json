@@ -12,6 +12,8 @@
     "prettier:check": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "db:init": "prisma migrate dev --name init",
+    "db:migrate": "prisma migrate deploy",
+    "db:migration-status": "prisma migrate status",
     "db:generate": "prisma generate",
     "db:seed": "tsx prisma/seed.ts"
   },
