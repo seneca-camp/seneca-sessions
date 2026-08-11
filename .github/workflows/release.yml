@@ -57,7 +57,7 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Build Docker image
-        run: "docker build -f Dockerfile -t ghcr.io/${{ github.repository }}:${{ github.ref_name }}."
+        run: "docker build -f Dockerfile -t ghcr.io/${{ github.repository }}:${{ github.ref_name }} ."
 
       - name: Push Docker image
         run: "docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
