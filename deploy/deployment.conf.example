@@ -1,0 +1,4 @@
+GITHUB_TOKEN=GitHub personal access token (ideally fine grained)
+DEPLOYMENT=/path/to/where/the/app/is/deplpoyed
+APP_NAME=supervisorctl unit name
+DATABASE_URL=file:../db.sqlite
