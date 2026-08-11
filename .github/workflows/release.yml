@@ -30,12 +30,12 @@ jobs:
             ./startup.sh
             ./package.json
             ./package-lock.json
-          outPath: seneca-sessions-${{ github.ref }}.tar.gz
+          outPath: seneca-sessions-${{ github.ref_name }}.tar.gz
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
           files: |
-            seneca-sessions-${{ github.ref }}.tar.gz
+            seneca-sessions-${{ github.ref_name }}.tar.gz
 
   docker:
     runs-on: ubuntu-latest
@@ -56,9 +56,9 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Build Docker image
-        run: "docker build -f Dockerfile -t ghcr.io/${{ github.repository }}:${{ github.ref }}."
+        run: "docker build -f Dockerfile -t ghcr.io/${{ github.repository }}:${{ github.ref_name }}."
 
       - name: Push Docker image
-        run: "docker push ghcr.io/${{ github.repository }}:${{ github.ref }}"
-      - run: "docker tag ghcr.io/${{ github.repository }}:${{ github.ref }} ghcr.io/${{ github.repository }}:latest"
+        run: "docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
+      - run: "docker tag ghcr.io/${{ github.repository }}:${{ github.ref_name }} ghcr.io/${{ github.repository }}:latest"
       - run: "docker push ghcr.io/${{ github.repository }}:latest"
