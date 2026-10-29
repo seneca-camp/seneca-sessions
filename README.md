@@ -6,6 +6,7 @@
 
 - Run `cp .env-example .env` and set your own env variables
 - Run `npm install` to install all dependencies
+- Run `npx db:generate` to generate the db client
 
 ## Development
 
