@@ -9,3 +9,4 @@ appdb/
 /.react-router
 /.idea
 /app/generated
+/deploy/deployment.conf
